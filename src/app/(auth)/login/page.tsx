@@ -1,4 +1,5 @@
 import Image from "next/image";
+import "../../globals.css";
 
 export default function Home() {
   return (
@@ -62,13 +63,22 @@ export default function Home() {
         <div className="mb-6 w-full text-center text-2xl font-semibold uppercase">
           Play
         </div>
-        <label for="email" className="mb-1 inline-block text-gray-300">
+        <label htmlFor="email" className="mb-1 inline-block text-gray-300">
           Email*
         </label>
         <input
           id="email"
           type="email"
           placeholder="Enter your email"
+          className="mb-4 rounded-lg border bg-transparent px-3 py-2"
+        />
+        <label htmlFor="email" className="mb-1 inline-block text-gray-300">
+          Password*
+        </label>
+        <input
+          id="password"
+          type="password"
+          placeholder="Enter your password"
           className="mb-4 rounded-lg border bg-transparent px-3 py-2"
         />
         <button className="bg-[#ae7aff] px-4 py-3 text-black">
