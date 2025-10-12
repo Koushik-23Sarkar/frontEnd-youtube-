@@ -1,7 +1,18 @@
-export default function VideoSuggestionCard() {
+'use client'
+import { useRouter } from "next/navigation";
+
+export default function VideoSuggestionCard({videoId , title,thumbnail,avatar,owner,views,createdTime}) {
+  const router = useRouter();
+  const goToThatVideo = () => {
+    console.log(videoId);
+    router.push(`/video/${videoId}`);
+  };
   return (
     <>
-      <div className="w-full gap-x-2 border pr-2 md:flex">
+      <div
+        onClick={() => goToThatVideo()}
+        className="w-full gap-x-2 border pr-2 md:flex"
+      >
         <div className="relative mb-2 w-full md:mb-0 md:w-5/12">
           <div className="w-full pt-[56%]">
             <div className="absolute inset-0">
@@ -26,11 +37,11 @@ export default function VideoSuggestionCard() {
           </div>
           <div className="w-full pt-1 md:pt-0">
             <h6 className="mb-1 text-sm font-semibold">
-              JavaScript Fundamentals: Variables and Data Types
+              {title}
             </h6>
             <p className="mb-0.5 mt-2 text-sm text-gray-200">Code Master</p>
             <p className="flex text-sm text-gray-200">
-              10.3k Views · 44 minutes ago
+              {views} Views · 44 minutes ago
             </p>
           </div>
         </div>
