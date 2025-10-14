@@ -1,43 +1,47 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import axios from "axios";
+import { useAppDispatch, useAppSelector } from "@/app/lib/hooks";
+import { searchVideo } from "@/app/searchSlice";
 
 export default function SearchInputBox() {
-  const [videos, setVideos] = useState([]);
   const [page, setPage] = useState(1);
   const [limit] = useState(10);
   const [query, setQuery] = useState("");
   const [sortBy, setSortBy] = useState("createdAt");
   const [sortType, setSortType] = useState("desc");
-  const [loading, setLoading] = useState(false);
-  const [totalPages, setTotalPages] = useState(1);
+  const searchRef = useRef();
+  const {isSearchBoxSelected,videos,loading:searchLoading ,error} = useAppSelector(state =>  state.search)
+  const dispatch = useAppDispatch();
+
   const handleEnter = async (e) => {
     if (e.key == "Enter") {
-      try {
-        setLoading(true);
-
-        const params = {
-          page,
-          limit,
-          query,
-          sortBy,
-          sortType,
-        };
-
-        const res = await axios.get("http://localhost:8000/api/v1/videos", {
-          params,
-        });
-        const data = res.data.data; // Assuming ApiResponse wraps it
-        console.log(data);
-        setVideos(data.docs); // aggregatePaginate returns { docs, totalPages, etc. }
-        setTotalPages(data.totalPages);
-      } catch (err) {
-        console.error("Error fetching videos:", err);
-      } finally {
-        // setLoading(false);
-      }
+      console.log("Enter button is clicked!")
+      const params = {
+        page,
+        limit,
+        query,
+        sortBy,
+        sortType,
+      };
+      console.log(searchVideo);
+      dispatch(searchVideo(params))
     }
   };
+
+  useEffect(()=>{
+    const handleClickOutside = (event)=>{
+      if(searchRef.current && !searchRef.current.contains(event.target)){
+        console.log("You click outside the serach box")
+      }
+    }
+
+    document.addEventListener("mousedown",handleClickOutside);
+    return ()=>{
+      document.removeEventListener("mousedown",handleClickOutside);
+    }
+  })
+
   return (
     <div>
       <input
@@ -46,6 +50,8 @@ export default function SearchInputBox() {
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         onKeyPress={handleEnter}
+        ref={searchRef}
+        onFocus={()=>console.log("Now you click the search!")}
       />
       <span className="absolute left-2.5 top-1/2 inline-block -translate-y-1/2">
         <svg
