@@ -1,10 +1,11 @@
 'use client'
+import axios from "axios";
 import { useRouter } from "next/navigation";
 export default function VideoDetails() {
   const router = useRouter();
-  const goToThatChannel = ()=>{
-    console.log(channelId);
-    router.push(`/channel/${channelId}`);
+  const getThatChannel = ()=>{
+    console.log("channel click!");
+    router.push('/channel/hsacusadhckiusah')
   }
   return (
     <div
@@ -289,7 +290,7 @@ export default function VideoDetails() {
         </div>
       </div>
       <div className="mt-4 flex items-center justify-between">
-        <div onClick={goToThatChannel()} className="flex items-center gap-x-4">
+        <div onClick={()=>getThatChannel()} className="flex items-center gap-x-4">
           <div className="mt-2 h-12 w-12 shrink-0">
             <img
               src="https://images.pexels.com/photos/18264716/pexels-photo-18264716/free-photo-of-man-people-laptop-internet.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"

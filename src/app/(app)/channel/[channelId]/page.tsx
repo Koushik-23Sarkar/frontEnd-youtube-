@@ -6,11 +6,13 @@ import ChannelEmptyPlaylist from "../../../components/channelEmptyPlaylistPage";
 import ChannelPlaylist from "../../../components/channelPlaylistPage";
 import ChannelEmptyTweet from "../../../components/channelEmptyTweetPage";
 import { useState } from "react";
+import ChannelEmptySubScribed from "@/app/components/channelEmptySubscribedPage";
 
 enum activeTabStatus {
   Video = "video",
   Playlist = "playlist",
   Tweet = "tweet",
+  Subscribed = "subscribed"
 }
 
 export default function Home() {
@@ -108,14 +110,14 @@ export default function Home() {
           </li>
           <li className="w-full">
             <button
-              onClick={() => setActiveTab(activeTabStatus.Tweet)}
+              onClick={() => setActiveTab(activeTabStatus.Subscribed)}
               className={`w-full px-3 py-1.5 border-b-2 ${
-                activeTab === activeTabStatus.Tweet
+                activeTab === activeTabStatus.Subscribed
                   ? "border-[#ae7aff] text-[#ae7aff]"
                   : "border-transparent text-gray-400"
               }`}
             >
-              Tweets
+              Subscribed
             </button>
           </li>
         </ul>
@@ -123,6 +125,7 @@ export default function Home() {
         {activeTab == activeTabStatus.Video && <ChannelEmptyVideoPage />}
         {activeTab == activeTabStatus.Playlist && <ChannelEmptyPlaylist />}
         {activeTab == activeTabStatus.Tweet && <ChannelEmptyTweet />}
+        {activeTab == activeTabStatus.Subscribed && <ChannelEmptySubScribed/> }
       </div>
     </section>
   );

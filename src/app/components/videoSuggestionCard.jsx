@@ -1,10 +1,11 @@
 'use client'
 import { useRouter } from "next/navigation";
 
-export default function VideoSuggestionCard({videoId , title,thumbnail,avatar,owner,views,createdTime}) {
+export default function VideoSuggestionCard({getChannelIdFromVideoSuggestion, videoId , title,thumbnail,avatar,owner,views,createdTime}) {
   const router = useRouter();
   const goToThatVideo = () => {
     console.log(videoId);
+    getChannelIdFromVideoSuggestion(owner)
     router.push(`/video/${videoId}`);
   };
   return (
