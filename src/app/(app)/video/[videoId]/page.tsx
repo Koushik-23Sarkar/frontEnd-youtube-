@@ -46,9 +46,11 @@ export default function Home() {
   if (loading) return <Loading />; // ✅ show loading before data
 
   if (isSearchBoxSelected) {
-    return <SearchBoxCases />;
+    console.log("isSearchBoxSelected:->");
+    return <h1>Search History</h1>;
   }
 
+  
   return (
     <section className="w-full pb-[70px] sm:ml-[70px] sm:pb-0">
       <div className="flex w-full flex-wrap gap-4 p-4 lg:flex-nowrap">

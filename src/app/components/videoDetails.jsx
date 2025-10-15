@@ -132,7 +132,7 @@ export default function VideoDetails({channelId}) {
                   <li className="mb-2 last:mb-0">
                     <label
                       className="group/label inline-flex cursor-pointer items-center gap-x-3"
-                      for="JavaScript Basics-checkbox"
+                      htmlFor="JavaScript Basics-checkbox"
                     >
                       <input
                         type="checkbox"

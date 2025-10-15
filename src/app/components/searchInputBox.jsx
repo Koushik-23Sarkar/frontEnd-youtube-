@@ -5,6 +5,7 @@ import { useAppDispatch, useAppSelector } from "@/app/lib/hooks";
 import { searchVideo } from "@/app/searchSlice";
 import {changeIsSearchBoxSelected,changeSearchContant} from "@/app/searchSlice";
 import { useParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 export default function SearchInputBox() {
   const [page, setPage] = useState(1);
@@ -16,41 +17,43 @@ export default function SearchInputBox() {
   const {isSearchBoxSelected,videos,loading:searchLoading ,error,searchContent} = useAppSelector(state =>  state.search)
   const dispatch = useAppDispatch();
   const { videoId } = useParams(); 
+  const router = useRouter()
 
   const handleEnter = async (e) => {
     if (e.key == "Enter") {
-      console.log("Enter button is clicked!")
+      // when we enter in the search box, we will move to the /search/[searchContent]
       const params = {
         page,
         limit,
-        query,
+        query: searchContent,
         sortBy,
-        sortType,
-      };
-      console.log(searchVideo);
+        sortType
+      }
+      dispatch(changeIsSearchBoxSelected(false))
       dispatch(searchVideo(params))
+      router.push(`/search/${searchContent}`);
     }
   };
 
-  useEffect(()=>{
-    const handleClickOutside = (event)=>{
-      if(searchRef.current && !searchRef.current.contains(event.target)){
-        console.log("You click outside the serach box")
-        console.log(`params: ${videoId}`);
-        if(videos?.length == 0 || searchContent?.lenght == 0 || videoId?.length>0){
-          dispatch(changeIsSearchBoxSelected(false))
-        }
-        else {
-          dispatch(changeIsSearchBoxSelected(true))
-        }
-      }
-    }
+  // useEffect(()=>{
+  //   const handleClickOutside = (event)=>{
+  //     if(searchRef.current && !searchRef.current.contains(event.target)){
+  //       console.log("You click outside the serach box")
+  //       console.log(`params: ${videoId}`);
+  //       if(videos?.length == 0 || searchContent?.lenght == 0 || videoId?.length>0){
+  //         dispatch(changeIsSearchBoxSelected(false))
+  //       }
+  //       else {
+  //         dispatch(changeIsSearchBoxSelected(true))
+  //       }
+  //     }
+  //   }
 
-    document.addEventListener("mousedown",handleClickOutside);
-    return ()=>{
-      document.removeEventListener("mousedown",handleClickOutside);
-    }
-  },[searchContent])
+  //   document.addEventListener("mousedown",handleClickOutside);
+  //   return ()=>{
+  //     document.removeEventListener("mousedown",handleClickOutside);
+  //   }
+  // },[searchContent])
 
   return (
     <div>

@@ -22,9 +22,14 @@ export default function Home() {
   const [activeTab, setActiveTab] = useState<activeTabStatus>(
     activeTabStatus.Video
   );
+
+
   if (isSearchBoxSelected) {
-    return <SearchBoxCases />;
+    console.log("isSearchBoxSelected:->");
+    return <h1>Search History</h1>;
   }
+
+  
   return (
     <section className="w-full pb-[70px] sm:ml-[70px] sm:pb-0 lg:ml-0">
       <div className="relative min-h-[150px] w-full pt-[16.28%]">

@@ -21,7 +21,7 @@ export default function Home() {
 
   if (isSearchBoxSelected) {
     console.log("isSearchBoxSelected:->")
-    return <SearchBoxCases/>
+    return <h1>Search History</h1>
   }
 
   console.log("Rendering HomePageVideo (Default view)");
