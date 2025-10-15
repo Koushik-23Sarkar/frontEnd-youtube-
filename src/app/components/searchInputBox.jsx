@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useAppDispatch, useAppSelector } from "@/app/lib/hooks";
 import { searchVideo } from "@/app/searchSlice";
+import {changeIsSearchBoxSelected,changeSearchContant} from "@/app/searchSlice";
 
 export default function SearchInputBox() {
   const [page, setPage] = useState(1);
@@ -11,7 +12,7 @@ export default function SearchInputBox() {
   const [sortBy, setSortBy] = useState("createdAt");
   const [sortType, setSortType] = useState("desc");
   const searchRef = useRef();
-  const {isSearchBoxSelected,videos,loading:searchLoading ,error} = useAppSelector(state =>  state.search)
+  const {isSearchBoxSelected,videos,loading:searchLoading ,error,searchContent} = useAppSelector(state =>  state.search)
   const dispatch = useAppDispatch();
 
   const handleEnter = async (e) => {
@@ -33,6 +34,11 @@ export default function SearchInputBox() {
     const handleClickOutside = (event)=>{
       if(searchRef.current && !searchRef.current.contains(event.target)){
         console.log("You click outside the serach box")
+        if(videos?.length == 0 || searchContent?.lenght == 0){
+          dispatch(changeIsSearchBoxSelected(false))
+        }else {
+          dispatch(changeIsSearchBoxSelected(true))
+        }
       }
     }
 
@@ -40,7 +46,7 @@ export default function SearchInputBox() {
     return ()=>{
       document.removeEventListener("mousedown",handleClickOutside);
     }
-  })
+  },[searchContent])
 
   return (
     <div>
@@ -48,10 +54,16 @@ export default function SearchInputBox() {
         className="w-full border bg-transparent py-1 pl-8 pr-3 placeholder-white outline-none sm:py-2"
         placeholder="Search"
         value={query}
-        onChange={(e) => setQuery(e.target.value)}
+        onChange={(e) => {
+          setQuery(e.target.value)
+          dispatch(changeSearchContant(e.target.value))
+        }}
         onKeyPress={handleEnter}
         ref={searchRef}
-        onFocus={()=>console.log("Now you click the search!")}
+        onFocus={()=>{
+          console.log("Now you click the search!")
+          dispatch(changeIsSearchBoxSelected(true))
+        }}
       />
       <span className="absolute left-2.5 top-1/2 inline-block -translate-y-1/2">
         <svg

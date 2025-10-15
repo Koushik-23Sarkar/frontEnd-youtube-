@@ -9,8 +9,8 @@ export const searchVideo = createAsyncThunk(
       const res = await axios.get("http://localhost:8000/api/v1/videos", {
         ...params,
       });
-      const data = res; // Assuming ApiResponse wraps it
-      console.log(data);
+      const data = res.data; // Assuming ApiResponse wraps it
+      return data;
     } catch (error) {
       return rejectWithValue(error);
     }
@@ -24,8 +24,19 @@ const searchSlice = createSlice({
     videos: null,
     loading: false,
     error: null,
+    searchContent: ""
   },
-  reducers: {},
+  reducers: {
+    changeIsSearchBoxSelected: (state,action)=>{
+        console.log("in the changeIsSearchBoxSelected");
+        state.isSearchBoxSelected = action.payload;
+        console.log(state.isSearchBoxSelected);
+    },
+    changeSearchContant: (state,action)=>{
+      state.searchContent = action.payload
+      console.log(state.searchContent);
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(searchVideo.pending, (state, action) => {
@@ -37,12 +48,15 @@ const searchSlice = createSlice({
         state.isSearchBoxSelected=false;
       })
       .addCase(searchVideo.fulfilled, (state, action) => {
-        console.log(`searchVideo.fulfilled action: ${action}`);
+        console.log("searchVideo.fulfilled action:"+ action);
         console.log(`searchVideo.fulfilled state: ${state}`);
-        state.loading = true;
-        state.videos = action.payload;
+        console.log("action paylaod:")
+        console.log(action);
+        state.loading = false;
+        state.videos = action.payload.data.docs;
+        console.log(state.videos);
         state.error = null;
-        state.isSearchBoxSelected=false;
+        state.isSearchBoxSelected=true;
       })
       .addCase(searchVideo.rejected, (state) => {
         console.log(`searchVideo.rejected action: ${action}`);
@@ -56,5 +70,5 @@ const searchSlice = createSlice({
   },
 });
 
-
+export const {changeIsSearchBoxSelected, changeSearchContant} = searchSlice.actions;
 export default searchSlice.reducer;

@@ -1,52 +1,75 @@
-"use client"
-import Image from "next/image";
-import VideoCardComponent from "../components/videoCardComponent";
-import axios from "axios";
-import { useEffect, useState } from "react";
-import Loading from "./loading";
+"use client";
 
+import { Key } from "react";
+import BlankPage from "../components/blankPage";
+import HomePageVideo from "../components/homePageVideos";
+import Loader from "../components/loader";
+import VideoListComponent from "../components/videoListComponent";
+import { useAppSelector } from "../lib/hooks";
 
 export default function Home() {
-  const [videos, setVideos] = useState([]);
-  const [loading, setLoading] = useState(true); // ✅ track loading state
+  const {
+    isSearchBoxSelected,
+    videos,
+    loading: searchLoading,
+    error,
+  } = useAppSelector((state) => state.search);
 
-  useEffect(() => {
-    const fetchVideos = async () => {
-      try {
-        const res = await axios.get("http://localhost:8000/api/v1/videos");
-        setVideos(res.data.data.docs);
-      } catch (err) {
-        console.error("Error fetching videos:", err);
-      } finally {
-        setLoading(false); // ✅ stop loading
-      }
-    };
-    fetchVideos();
-  }, []);
+  console.log("Rendering <Home /> component...");
+  console.log({ isSearchBoxSelected, videos, searchLoading, error });
 
-  if (loading) return <Loading />; // ✅ show loading before data
+  if (isSearchBoxSelected) {
+    if (searchLoading) {
+      console.log("Rendering Loader (searchLoading = true)");
+      return <Loader />;
+    }
 
-  return (
-    <section className="w-full pb-[70px] sm:ml-[70px] sm:pb-0 lg:ml-0">
-      <div className="grid grid-cols-[repeat(auto-fit,_minmax(300px,_1fr))] gap-4 p-4">
-        {videos.length > 0 ? (
-            videos.map((video) => (
-                <VideoCardComponent
-                  key={video.title} // ✅ add key
-                  title={video.title}
-                  thumbnail={video.thumbnail}
-                  views={video.views}
-                  videoId={video._id}
-                  avatar={video.owner?.avatar}
-                  createdTime={video.createdAt}
-                />
-            ))
-        ) : (
-          <p className="text-center w-full col-span-full text-gray-400">
-            No videos available.
-          </p>
-        )}
-      </div>
-    </section>
-  );
+    if (error) {
+      console.log("Rendering Error Message");
+      return <h1>Error: {error}</h1>;
+    }
+
+    if (videos?.length > 0) {
+      console.log("Rendering Video Found Component");
+      return (
+        <section className="w-full pb-[70px] sm:ml-[70px] sm:pb-0 lg:ml-0">
+          <div className="flex flex-col gap-4 p-4">
+            {videos.length > 0 ? (
+              videos.map(
+                (video: {
+                  _id: Key | null | undefined;
+                  owner: { username: unknown };
+                  title: unknown;
+                  description: unknown;
+                  views: unknown;
+                }) => (
+                  <VideoListComponent
+                    key={video._id}
+                    videoId={video._id}
+                    videoOwnerName={video.owner?.username}
+                    title={video.title}
+                    description={video.description}
+                    views={video.views}
+                  />
+                )
+              )
+            ) : (
+              <h1> video not found!</h1>
+            )}
+          </div>
+        </section>
+      );
+    }
+
+    if (videos?.length === 0) {
+      console.log("Rendering Video Not Found Component");
+      return <h1>Video not found!</h1>;
+    }
+
+    console.log("Rendering BlankPage (Search box selected, no data)");
+    return <BlankPage />;
+  }
+
+  console.log("Rendering HomePageVideo (Default view)");
+  return <HomePageVideo />;
 }

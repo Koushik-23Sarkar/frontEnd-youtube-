@@ -5,8 +5,8 @@ export default function VideoSuggestionCard({getChannelIdFromVideoSuggestion, vi
   const router = useRouter();
   const goToThatVideo = () => {
     console.log(videoId);
-    getChannelIdFromVideoSuggestion(owner)
     router.push(`/video/${videoId}`);
+    getChannelIdFromVideoSuggestion(owner)
   };
   return (
     <>

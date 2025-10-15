@@ -1,6 +1,23 @@
-export default function VideoListComponent() {
+"use client"
+import { useRouter } from "next/navigation";
+
+export default function VideoListComponent({
+  videoOwnerName,
+  title,
+  views,
+  description,
+  videoId
+}) {
+  const router = useRouter();
+  const goToThatVideo = () => {
+    console.log(videoId);
+    router.push(`/video/${videoId}`);
+  };
   return (
-    <div className="w-full max-w-3xl gap-x-4 md:flex">
+    <div
+      onClick={() => goToThatVideo()}
+      className="w-full max-w-3xl gap-x-4 md:flex"
+    >
       <div className="relative mb-2 w-full md:mb-0 md:w-5/12">
         <div className="w-full pt-[56%]">
           <div className="absolute inset-0">
@@ -24,11 +41,9 @@ export default function VideoListComponent() {
           />
         </div>
         <div className="w-full">
-          <h6 className="mb-1 font-semibold md:max-w-[75%]">
-            JavaScript Fundamentals: Variables and Data Types
-          </h6>
+          <h6 className="mb-1 font-semibold md:max-w-[75%]">{title}</h6>
           <p className="flex text-sm text-gray-200 sm:mt-3">
-            10.3k Views · 44 minutes ago
+            {views} Views · 44 minutes ago
           </p>
           <div className="flex items-center gap-x-4">
             <div className="mt-2 hidden h-10 w-10 shrink-0 md:block">
@@ -38,12 +53,9 @@ export default function VideoListComponent() {
                 className="h-full w-full rounded-full"
               />
             </div>
-            <p className="text-sm text-gray-200">Code Master</p>
+            <p className="text-sm text-gray-200">{videoOwnerName}</p>
           </div>
-          <p className="mt-2 hidden text-sm md:block">
-            Learn the basics of JavaScript, including variables, data types, and
-            how to use them in your programs.
-          </p>
+          <p className="mt-2 hidden text-sm md:block">{description}</p>
         </div>
       </div>
     </div>
