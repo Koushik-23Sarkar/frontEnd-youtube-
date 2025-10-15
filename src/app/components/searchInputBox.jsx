@@ -37,7 +37,7 @@ export default function SearchInputBox() {
       if(searchRef.current && !searchRef.current.contains(event.target)){
         console.log("You click outside the serach box")
         console.log(`params: ${videoId}`);
-        if(videos?.length == 0 || searchContent?.lenght == 0 || videoId.length>0){
+        if(videos?.length == 0 || searchContent?.lenght == 0 || videoId?.length>0){
           dispatch(changeIsSearchBoxSelected(false))
         }
         else {
@@ -57,7 +57,7 @@ export default function SearchInputBox() {
       <input
         className="w-full border bg-transparent py-1 pl-8 pr-3 placeholder-white outline-none sm:py-2"
         placeholder="Search"
-        value={query}
+        value={searchContent}
         onChange={(e) => {
           setQuery(e.target.value)
           dispatch(changeSearchContant(e.target.value))

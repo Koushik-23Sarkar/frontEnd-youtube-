@@ -18,7 +18,7 @@ export default function ChannelEmptyPlaylist() {
                   stroke="currentColor"
                   strokeWidth="2"
                   strokeLinecap="round"
-                  stroke-linejoin="round"
+                  strokeLinejoin="round"
                 ></path>
               </svg>
             </span>
