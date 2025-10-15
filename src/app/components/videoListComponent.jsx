@@ -1,5 +1,7 @@
 "use client"
 import { useRouter } from "next/navigation";
+import { useAppDispatch, useAppSelector } from "@/app/lib/hooks";
+import {changeIsSearchBoxSelected,changeSearchContant} from "@/app/searchSlice";
 
 export default function VideoListComponent({
   videoOwnerName,
@@ -9,9 +11,11 @@ export default function VideoListComponent({
   videoId
 }) {
   const router = useRouter();
+    const dispatch = useAppDispatch();
   const goToThatVideo = () => {
     console.log(videoId);
     router.push(`/video/${videoId}`);
+    dispatch(changeIsSearchBoxSelected(false))
   };
   return (
     <div

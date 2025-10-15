@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import Image from "next/image";
 import VideoSuggestionCard from "../../../components/videoSuggestionCard";
 import CommentSection from "../../../components/commentSection";
@@ -8,21 +8,26 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Loading from "../../loading";
 import { useParams } from "next/navigation";
+import { useAppSelector } from "@/app/lib/hooks";
+import SearchBoxCases from "@/app/components/SearchBox/serachBoxCases";
 
 export default function Home() {
   const [videos, setVideos] = useState([]);
   const [loading, setLoading] = useState(true); // ✅ track loading state
-  const {videoId} = useParams();
-  const [channelId,setChannelId] = useState(null);
+  const { videoId } = useParams();
+  const [channelId, setChannelId] = useState(null);
+  const { isSearchBoxSelected } = useAppSelector((state) => state.search);
 
-  useEffect(()=>{
-    const fetchThatVideo = async ()=>{
-      const res = await axios.get(`http://localhost:8000/api/v1/videos/${videoId}`)
-      console.log("Info about that video: ")
-;      console.log(res);
-    } 
+  useEffect(() => {
+    const fetchThatVideo = async () => {
+      const res = await axios.get(
+        `http://localhost:8000/api/v1/videos/${videoId}`
+      );
+      console.log("Info about that video: ");
+      console.log(res);
+    };
     fetchThatVideo();
-  },[])
+  }, []);
 
   useEffect(() => {
     const fetchSuggestionVideos = async () => {
@@ -39,6 +44,11 @@ export default function Home() {
   }, []);
 
   if (loading) return <Loading />; // ✅ show loading before data
+
+  if (isSearchBoxSelected) {
+    return <SearchBoxCases />;
+  }
+
   return (
     <section className="w-full pb-[70px] sm:ml-[70px] sm:pb-0">
       <div className="flex w-full flex-wrap gap-4 p-4 lg:flex-nowrap">

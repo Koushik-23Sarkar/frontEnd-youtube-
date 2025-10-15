@@ -1,11 +1,13 @@
 'use client'
 import { useRouter } from "next/navigation";
+import {changeIsSearchBoxSelected,changeSearchContant} from "@/app/searchSlice";
 
 export default function VideoSuggestionCard({getChannelIdFromVideoSuggestion, videoId , title,thumbnail,avatar,owner,views,createdTime}) {
   const router = useRouter();
   const goToThatVideo = () => {
     console.log(videoId);
     router.push(`/video/${videoId}`);
+    changeIsSearchBoxSelected(false)
     getChannelIdFromVideoSuggestion(owner)
   };
   return (
