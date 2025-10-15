@@ -1,11 +1,18 @@
 'use client'
 import axios from "axios";
 import { useRouter } from "next/navigation";
-export default function VideoDetails() {
+import { useAppDispatch, useAppSelector } from "@/app/lib/hooks";
+import { changeIsSearchBoxSelected } from "../searchSlice";
+
+
+export default function VideoDetails({channelId}) {
+  const { isSearchBoxSelected } = useAppSelector((state) => state.search);
   const router = useRouter();
+  const dispatch = useAppDispatch();
+
   const getThatChannel = ()=>{
-    console.log("channel click!");
-    router.push('/channel/hsacusadhckiusah')
+    console.log("channel click!")
+    router.push("/channel/ckjhbasdcjhbdsac")
   }
   return (
     <div

@@ -4,6 +4,7 @@ import axios from "axios";
 import { useAppDispatch, useAppSelector } from "@/app/lib/hooks";
 import { searchVideo } from "@/app/searchSlice";
 import {changeIsSearchBoxSelected,changeSearchContant} from "@/app/searchSlice";
+import { useParams } from "next/navigation";
 
 export default function SearchInputBox() {
   const [page, setPage] = useState(1);
@@ -14,6 +15,7 @@ export default function SearchInputBox() {
   const searchRef = useRef();
   const {isSearchBoxSelected,videos,loading:searchLoading ,error,searchContent} = useAppSelector(state =>  state.search)
   const dispatch = useAppDispatch();
+  const { videoId } = useParams(); 
 
   const handleEnter = async (e) => {
     if (e.key == "Enter") {
@@ -34,9 +36,11 @@ export default function SearchInputBox() {
     const handleClickOutside = (event)=>{
       if(searchRef.current && !searchRef.current.contains(event.target)){
         console.log("You click outside the serach box")
-        if(videos?.length == 0 || searchContent?.lenght == 0){
+        console.log(`params: ${videoId}`);
+        if(videos?.length == 0 || searchContent?.lenght == 0 || videoId.length>0){
           dispatch(changeIsSearchBoxSelected(false))
-        }else {
+        }
+        else {
           dispatch(changeIsSearchBoxSelected(true))
         }
       }

@@ -7,19 +7,24 @@ import ChannelPlaylist from "../../../components/channelPlaylistPage";
 import ChannelEmptyTweet from "../../../components/channelEmptyTweetPage";
 import { useState } from "react";
 import ChannelEmptySubScribed from "@/app/components/channelEmptySubscribedPage";
+import SearchBoxCases from "@/app/components/SearchBox/serachBoxCases";
+import { useAppSelector } from "@/app/lib/hooks";
 
 enum activeTabStatus {
   Video = "video",
   Playlist = "playlist",
   Tweet = "tweet",
-  Subscribed = "subscribed"
+  Subscribed = "subscribed",
 }
 
 export default function Home() {
+  const { isSearchBoxSelected } = useAppSelector((state) => state.search);
   const [activeTab, setActiveTab] = useState<activeTabStatus>(
     activeTabStatus.Video
   );
-
+  if (isSearchBoxSelected) {
+    return <SearchBoxCases />;
+  }
   return (
     <section className="w-full pb-[70px] sm:ml-[70px] sm:pb-0 lg:ml-0">
       <div className="relative min-h-[150px] w-full pt-[16.28%]">
@@ -125,7 +130,7 @@ export default function Home() {
         {activeTab == activeTabStatus.Video && <ChannelEmptyVideoPage />}
         {activeTab == activeTabStatus.Playlist && <ChannelEmptyPlaylist />}
         {activeTab == activeTabStatus.Tweet && <ChannelEmptyTweet />}
-        {activeTab == activeTabStatus.Subscribed && <ChannelEmptySubScribed/> }
+        {activeTab == activeTabStatus.Subscribed && <ChannelEmptySubScribed />}
       </div>
     </section>
   );
