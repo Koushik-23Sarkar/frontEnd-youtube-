@@ -3,9 +3,10 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/app/lib/hooks";
 import { changeIsSearchBoxSelected } from "../searchSlice";
+import { Like } from "../lib/Likes/like.service";
 
 
-export default function VideoDetails({channelId}) {
+export default function VideoDetails({channelId,videoID}) {
   const { isSearchBoxSelected } = useAppSelector((state) => state.search);
   const router = useRouter();
   const dispatch = useAppDispatch();
@@ -13,6 +14,17 @@ export default function VideoDetails({channelId}) {
   const getThatChannel = ()=>{
     console.log("channel click!")
     router.push("/channel/ckjhbasdcjhbdsac")
+  }
+  const handleTheVideoLikeButton = async ()=>{
+    console.log("click to the like button")
+    // create a like data
+    const response = await Like.video(videoID);
+    console.log(response);
+  }
+  const handleTheVideoDislikeButton = ()=>{
+    console.log("click to the dislike button")
+    // remove that like data
+
   }
   return (
     <div
@@ -29,8 +41,10 @@ export default function VideoDetails({channelId}) {
         </div>
         <div className="w-full md:w-1/2 lg:w-full xl:w-1/2">
           <div className="flex items-center justify-between gap-x-4 md:justify-end lg:justify-between xl:justify-end">
+            {/** like and dislike part */}
             <div className="flex overflow-hidden rounded-lg border">
               <button
+                onClick={handleTheVideoLikeButton}
                 className="group/btn flex items-center gap-x-2 border-r border-gray-700 px-4 py-1.5 after:content-[attr(data-like)] hover:bg-white/10 focus:after:content-[attr(data-like-alt)]"
                 data-like="3050"
                 data-like-alt="3051"
@@ -53,6 +67,7 @@ export default function VideoDetails({channelId}) {
                 </span>
               </button>
               <button
+                onClick={handleTheVideoDislikeButton}
                 className="group/btn flex items-center gap-x-2 px-4 py-1.5 after:content-[attr(data-like)] hover:bg-white/10 focus:after:content-[attr(data-like-alt)]"
                 data-like="20"
                 data-like-alt="21"
@@ -75,6 +90,7 @@ export default function VideoDetails({channelId}) {
                 </span>
               </button>
             </div>
+            {/** save to the playlist button */}
             <div className="relative block">
               <button className="peer flex items-center gap-x-2 rounded-lg bg-white px-4 py-1.5 text-black">
                 <span className="inline-block w-5">

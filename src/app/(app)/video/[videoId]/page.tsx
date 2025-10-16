@@ -56,7 +56,7 @@ export default function Home() {
       <div className="flex w-full flex-wrap gap-4 p-4 lg:flex-nowrap">
         <div className="col-span-12 w-full">
           <VideoPlay />
-          <VideoDetails channelId={channelId} />
+          <VideoDetails channelId={channelId} videoID={videoId} />
           <button className="peer w-full rounded-lg border p-4 text-left duration-200 hover:bg-white/5 focus:bg-white/5 sm:hidden">
             <h6 className="font-semibold">573 Comments...</h6>
           </button>
