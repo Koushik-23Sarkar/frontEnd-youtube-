@@ -27,18 +27,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <div className="h-screen overflow-y-auto bg-[#121212] text-white">
-          <HeaderComponent/>
-          <div className="flex min-h-[calc(100vh-66px)] sm:min-h-[calc(100vh-82px)]">
-            <LeftSideBar/>
-            {children}
-          </div>
-        </div>
-      </body>
-    </html>
+    <div className="h-screen overflow-y-auto bg-[#121212] text-white">
+      <HeaderComponent />
+      <div className="flex min-h-[calc(100vh-66px)] sm:min-h-[calc(100vh-82px)]">
+        <LeftSideBar />
+        {children}
+      </div>
+    </div>
   );
 }

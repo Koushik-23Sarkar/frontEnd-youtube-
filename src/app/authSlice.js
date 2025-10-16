@@ -8,6 +8,7 @@ export const loginUser = createAsyncThunk(
     try {
       console.log(credentials);
       const response = await axiosClient.post("/api/v1/users/login", credentials,{withCredentials:true});
+      console.log(response)
       return response.data;
     } catch (error) {
       return rejectWithValue(error);
@@ -54,6 +55,11 @@ const authSlice = createSlice({
         state.loading = false;
         state.isAuthenticated = !!action.payload;
         state.user = action.payload.data.user;
+
+        console.log("state.isAuthenticated");
+        console.log(state.isAuthenticated)
+        console.log("state.user");
+        console.log(state.user)
       })
       .addCase(loginUser.rejected, (state, action) => {
         console.log("state");

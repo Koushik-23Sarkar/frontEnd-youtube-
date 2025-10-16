@@ -1,7 +1,12 @@
+"use client";
+
+import { useAppSelector } from "../lib/hooks";
 import Button from "./button";
 import SearchInputBox from "./searchInputBox";
+import UserAvter from "./userAvater/userAvater";
 
 export default function HeaderComponent() {
+  const { isAuthenticated,user } = useAppSelector((state) => state.auth);
   return (
     <header className="sticky inset-x-0 top-0 z-50 w-full border-b border-white bg-[#121212] px-4">
       <nav className="mx-auto flex max-w-7xl items-center py-2">
@@ -260,8 +265,14 @@ export default function HeaderComponent() {
             </li>
           </ul>
           <div className="mb-8 mt-auto flex w-full flex-wrap gap-4 px-4 sm:mb-0 sm:mt-0 sm:items-center sm:px-0">
-            <Button btnColor="383737" btnText="Log in" textColor="white" />
-            <Button btnColor="ae7aff" btnText="Sign up" textColor="black" />
+            { (isAuthenticated == true && (user)) ? (
+              <UserAvter userChannel={user._id} />
+            ) : (
+              <>
+                <Button btnColor="383737" btnText="Log in" textColor="white" />
+                <Button btnColor="ae7aff" btnText="Sign up" textColor="black" />
+              </>
+            )}
           </div>
         </div>
       </nav>
