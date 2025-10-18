@@ -60,8 +60,9 @@ export default function Home() {
           <button className="peer w-full rounded-lg border p-4 text-left duration-200 hover:bg-white/5 focus:bg-white/5 sm:hidden">
             <h6 className="font-semibold">573 Comments...</h6>
           </button>
-          <CommentSection />
+          <CommentSection videoId={videoId} />
         </div>
+        {/** suggesested videos columns */}
         <div className="col-span-12 flex w-full shrink-0 flex-col gap-3 lg:w-[350px] xl:w-[400px]">
           {videos.length > 0 ? (
             videos.map((video) => (
