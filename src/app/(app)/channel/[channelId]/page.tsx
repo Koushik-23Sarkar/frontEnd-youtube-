@@ -17,62 +17,72 @@ import OwnerChannelEmptyTweetPage from "@/app/components/OwnerChannel/ownerChann
 import UploadVideoModelPopUp from "@/app/components/OwnerChannel/uploadVideoModelPopUp";
 import UploadingVideoModelPopUp from "@/app/components/OwnerChannel/uploadingVideoModelPopUp";
 import UploadedSuccessVideoModelPopUp from "@/app/components/OwnerChannel/uploadedSuccessVideoModelPopUp";
+import PersonalInformationChange from "@/app/components/OwnerChannel/personalInformationChange";
+import { ChannelInformationChange } from "@/app/components/OwnerChannel/channelInformationChange";
+import ChannelPasswordChange from "@/app/components/OwnerChannel/channelPasswordChange";
 
 enum activeTabStatus {
   Video = "video",
   Playlist = "playlist",
   Tweet = "tweet",
   Subscribed = "subscribed",
+  PersonalInformation = "Personal Information",
+  ChannelInformation = "Channel Information",
+  ChangePassword = "Change Password",
 }
 
 enum activeModeStatus {
   Edit = "editMode",
-  View = "viewMode"
+  View = "viewMode",
 }
 
 enum videoPopUpStatus {
-  NoVideoPopUp  = "noVideoPopUp",
+  NoVideoPopUp = "noVideoPopUp",
   uploadVideoPop = "uploadVideoPopUp",
   uploadingVideoPop = "uploadingVideoPop",
-  uploadedVideoPop ="uploadedVideoPopUp"
+  uploadedVideoPop = "uploadedVideoPopUp",
 }
 
 export default function Home() {
   const { isSearchBoxSelected } = useAppSelector((state) => state.search);
-  const {user} = useAppSelector((state)=>{
+  const { user } = useAppSelector((state) => {
     console.log(state);
     return state.auth;
   });
-  const [videoPopUp,setVideoPopUp] = useState<videoPopUpStatus>(videoPopUpStatus.NoVideoPopUp);
+  const [videoPopUp, setVideoPopUp] = useState<videoPopUpStatus>(
+    videoPopUpStatus.NoVideoPopUp
+  );
 
   const [activeTab, setActiveTab] = useState<activeTabStatus>(
     activeTabStatus.Video
   );
-  const [activeMode , setActiveMode] = useState<activeModeStatus>(activeModeStatus.View)
-  const {channelId} = useParams();
-  console.log(channelId)
-  console.log(user?._id)
-
+  const [activeMode, setActiveMode] = useState<activeModeStatus>(
+    activeModeStatus.View
+  );
+  const { channelId } = useParams();
+  console.log(channelId);
+  console.log(user?._id);
 
   if (isSearchBoxSelected) {
     console.log("isSearchBoxSelected:->");
     return <h1>Search History</h1>;
   }
 
-  const handleActiveMode = ()=>{
-    if(activeMode == activeModeStatus.Edit ){
-      setActiveMode(activeModeStatus.View)
+  const handleActiveMode = () => {
+    if (activeMode == activeModeStatus.Edit) {
+      setActiveMode(activeModeStatus.View);
+      setActiveTab(activeTabStatus.Video);
+    } else {
+      setActiveMode(activeModeStatus.Edit);
+      setActiveTab(activeTabStatus.PersonalInformation);
     }
-    else {
-      setActiveMode(activeModeStatus.Edit)
-    }
-  }
+  };
 
-  const handleVideoPopUp = (value: string)=>{
+  const handleVideoPopUp = (value: string) => {
     setVideoPopUp(value);
-    console.log(value)
-  }
-  
+    console.log(value);
+  };
+
   return (
     <section className="relative w-full pb-[70px] sm:ml-[70px] sm:pb-0 lg:ml-0">
       <div className="relative min-h-[150px] w-full pt-[16.28%]">
@@ -100,84 +110,144 @@ export default function Home() {
             </p>
           </div>
           {/** If i visit my own channel then Subscribe button become Edit button */}
-          {
-            (channelId==user?._id)? <OwnChannelEditButton handleActiveMode={handleActiveMode} activeMode={activeMode} /> : <ChannelSubscribeButton/>
-          }
+          {channelId == user?._id ? (
+            <OwnChannelEditButton
+              handleActiveMode={handleActiveMode}
+              activeMode={activeMode}
+            />
+          ) : (
+            <ChannelSubscribeButton />
+          )}
         </div>
+
         <ul className="no-scrollbar sticky top-[66px] z-[2] flex flex-row gap-x-2 overflow-auto border-b-2 border-gray-400 bg-[#121212] py-2 sm:top-[82px]">
-          <li className="w-full">
-            <button
-              onClick={() => setActiveTab(activeTabStatus.Video)}
-              className={`w-full px-3 py-1.5 border-b-2 ${
-                activeTab === activeTabStatus.Video
-                  ? "border-[#ae7aff] text-[#ae7aff]"
-                  : "border-transparent text-gray-400"
-              }`}
-            >
-              Videos
-            </button>
-          </li>
-          <li className="w-full">
-            <button
-              onClick={() => setActiveTab(activeTabStatus.Playlist)}
-              className={`w-full px-3 py-1.5 border-b-2 ${
-                activeTab === activeTabStatus.Playlist
-                  ? "border-[#ae7aff] text-[#ae7aff]"
-                  : "border-transparent text-gray-400"
-              }`}
-            >
-              Playlist
-            </button>
-          </li>
-          <li className="w-full">
-            <button
-              onClick={() => setActiveTab(activeTabStatus.Tweet)}
-              className={`w-full px-3 py-1.5 border-b-2 ${
-                activeTab === activeTabStatus.Tweet
-                  ? "border-[#ae7aff] text-[#ae7aff]"
-                  : "border-transparent text-gray-400"
-              }`}
-            >
-              Tweets
-            </button>
-          </li>
-          <li className="w-full">
-            <button
-              onClick={() => setActiveTab(activeTabStatus.Subscribed)}
-              className={`w-full px-3 py-1.5 border-b-2 ${
-                activeTab === activeTabStatus.Subscribed
-                  ? "border-[#ae7aff] text-[#ae7aff]"
-                  : "border-transparent text-gray-400"
-              }`}
-            >
-              Subscribed
-            </button>
-          </li>
+          {activeMode == activeModeStatus.Edit ? (
+            /** Edit mode is on */
+            <>
+              <li className="w-full">
+                <button
+                  onClick={() =>
+                    setActiveTab(activeTabStatus.PersonalInformation)
+                  }
+                  className={`w-full px-3 py-1.5 border-b-2 ${
+                    activeTab === activeTabStatus.PersonalInformation
+                      ? "border-[#ae7aff] text-[#ae7aff]"
+                      : "border-transparent text-gray-400"
+                  }`}
+                >
+                  Personal Information
+                </button>
+              </li>
+              <li className="w-full">
+                <button
+                  onClick={() =>
+                    setActiveTab(activeTabStatus.ChannelInformation)
+                  }
+                  className={`w-full px-3 py-1.5 border-b-2 ${
+                    activeTab === activeTabStatus.ChannelInformation
+                      ? "border-[#ae7aff] text-[#ae7aff]"
+                      : "border-transparent text-gray-400"
+                  }`}
+                >
+                  Channel Information
+                </button>
+              </li>
+              <li className="w-full">
+                <button
+                  onClick={() => setActiveTab(activeTabStatus.ChangePassword)}
+                  className={`w-full px-3 py-1.5 border-b-2 ${
+                    activeTab === activeTabStatus.ChangePassword
+                      ? "border-[#ae7aff] text-[#ae7aff]"
+                      : "border-transparent text-gray-400"
+                  }`}
+                >
+                  Change Password
+                </button>
+              </li>
+            </>
+          ) : (
+            /** Edit mode is off */
+            <>
+              <li className="w-full">
+                <button
+                  onClick={() => setActiveTab(activeTabStatus.Video)}
+                  className={`w-full px-3 py-1.5 border-b-2 ${
+                    activeTab === activeTabStatus.Video
+                      ? "border-[#ae7aff] text-[#ae7aff]"
+                      : "border-transparent text-gray-400"
+                  }`}
+                >
+                  Videos
+                </button>
+              </li>
+              <li className="w-full">
+                <button
+                  onClick={() => setActiveTab(activeTabStatus.Playlist)}
+                  className={`w-full px-3 py-1.5 border-b-2 ${
+                    activeTab === activeTabStatus.Playlist
+                      ? "border-[#ae7aff] text-[#ae7aff]"
+                      : "border-transparent text-gray-400"
+                  }`}
+                >
+                  Playlist
+                </button>
+              </li>
+              <li className="w-full">
+                <button
+                  onClick={() => setActiveTab(activeTabStatus.Tweet)}
+                  className={`w-full px-3 py-1.5 border-b-2 ${
+                    activeTab === activeTabStatus.Tweet
+                      ? "border-[#ae7aff] text-[#ae7aff]"
+                      : "border-transparent text-gray-400"
+                  }`}
+                >
+                  Tweets
+                </button>
+              </li>
+              <li className="w-full">
+                <button
+                  onClick={() => setActiveTab(activeTabStatus.Subscribed)}
+                  className={`w-full px-3 py-1.5 border-b-2 ${
+                    activeTab === activeTabStatus.Subscribed
+                      ? "border-[#ae7aff] text-[#ae7aff]"
+                      : "border-transparent text-gray-400"
+                  }`}
+                >
+                  Subscribed
+                </button>
+              </li>
+            </>
+          )}
         </ul>
         {/* <ChannelEmptyVideoPage/> */}
-        {/* {activeTab == activeTabStatus.Video && <ChannelEmptyVideoPage />}
+        {activeTab == activeTabStatus.Video && <ChannelEmptyVideoPage />}
         {activeTab == activeTabStatus.Playlist && <ChannelEmptyPlaylist />}
         {activeTab == activeTabStatus.Tweet && <ChannelEmptyTweet />}
-        {activeTab == activeTabStatus.Subscribed && <ChannelEmptySubScribed />} */}
-
-
+        {activeTab == activeTabStatus.Subscribed && <ChannelEmptySubScribed />}
+        {activeTab == activeTabStatus.PersonalInformation && (
+          <PersonalInformationChange />
+        )}
+        {activeTab == activeTabStatus.ChannelInformation && (
+          <ChannelInformationChange />
+        )}
+        {activeTab == activeTabStatus.ChangePassword && (
+          <ChannelPasswordChange />
+        )}
         {/**         {( <condition> ) && ( <result> )}             */}
-        {(activeTab==activeTabStatus.Video && activeMode == activeModeStatus.View ) && (<ChannelEmptyVideoPage/>)}
-        {(activeTab==activeTabStatus.Video && activeMode == activeModeStatus.Edit ) && (<OwnerChannelEmptyVideoPage handleVideoPopUp={handleVideoPopUp} />)}
-
-        {(activeTab==activeTabStatus.Playlist && activeMode == activeModeStatus.View ) && (<ChannelEmptyPlaylist/>)}
-        {(activeTab==activeTabStatus.Playlist && activeMode == activeModeStatus.Edit ) && (<ChannelPlaylist/>)}
-
-        {(activeTab==activeTabStatus.Tweet && activeMode == activeModeStatus.View ) && (<ChannelEmptyTweet/>)}
-        {(activeTab==activeTabStatus.Tweet && activeMode == activeModeStatus.Edit ) && (<OwnerChannelEmptyTweetPage/>)}
-
-        {(activeTab==activeTabStatus.Subscribed && activeMode == activeModeStatus.View ) && (<ChannelEmptySubScribed/>)}
-        {(activeTab==activeTabStatus.Subscribed && activeMode == activeModeStatus.Edit ) && (<ChannelEmptySubScribed/>)}
-
       </div>
-      {videoPopUp==videoPopUpStatus.uploadVideoPop  && <UploadVideoModelPopUp handleVideoPopUp={handleVideoPopUp} />}
-      {videoPopUp==videoPopUpStatus.uploadingVideoPop  && <UploadingVideoModelPopUp handleVideoPopUp={handleVideoPopUp} />}
-      {videoPopUp==videoPopUpStatus.uploadedVideoPop  &&  <UploadedSuccessVideoModelPopUp handleVideoPopUp={handleVideoPopUp} /> }
+
+
+      <>  {/** All video popups */}
+        {videoPopUp == videoPopUpStatus.uploadVideoPop && (
+          <UploadVideoModelPopUp handleVideoPopUp={handleVideoPopUp} />
+        )}
+        {videoPopUp == videoPopUpStatus.uploadingVideoPop && (
+          <UploadingVideoModelPopUp handleVideoPopUp={handleVideoPopUp} />
+        )}
+        {videoPopUp == videoPopUpStatus.uploadedVideoPop && (
+          <UploadedSuccessVideoModelPopUp handleVideoPopUp={handleVideoPopUp} />
+        )}
+      </>
     </section>
   );
 }
