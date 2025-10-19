@@ -12,12 +12,19 @@ import { useAppSelector } from "@/app/lib/hooks";
 import ChannelSubscribeButton from "@/app/components/channel/channelSubscribeButton";
 import { useParams } from "next/navigation";
 import OwnChannelEditButton from "@/app/components/userAvater/ownChannelEditButton";
+import OwnerChannelEmptyVideoPage from "@/app/components/OwnerChannel/ownerChannelEmptyVideoPage";
+import OwnerChannelEmptyTweetPage from "@/app/components/OwnerChannel/ownerChannelEmptyTweetPage";
 
 enum activeTabStatus {
   Video = "video",
   Playlist = "playlist",
   Tweet = "tweet",
   Subscribed = "subscribed",
+}
+
+enum activeModeStatus {
+  Edit = "editMode",
+  View = "viewMode"
 }
 
 export default function Home() {
@@ -30,6 +37,7 @@ export default function Home() {
   const [activeTab, setActiveTab] = useState<activeTabStatus>(
     activeTabStatus.Video
   );
+  const [activeMode , setActiveMode] = useState<activeModeStatus>(activeModeStatus.View)
   const {channelId} = useParams();
   console.log(channelId)
   console.log(user?._id)
@@ -38,6 +46,15 @@ export default function Home() {
   if (isSearchBoxSelected) {
     console.log("isSearchBoxSelected:->");
     return <h1>Search History</h1>;
+  }
+
+  const handleActiveMode = ()=>{
+    if(activeMode == activeModeStatus.Edit ){
+      setActiveMode(activeModeStatus.View)
+    }
+    else {
+      setActiveMode(activeModeStatus.Edit)
+    }
   }
 
   
@@ -69,7 +86,7 @@ export default function Home() {
           </div>
           {/** If i visit my own channel then Subscribe button become Edit button */}
           {
-            (channelId==user?._id)? <OwnChannelEditButton/> : <ChannelSubscribeButton/>
+            (channelId==user?._id)? <OwnChannelEditButton handleActiveMode={handleActiveMode} activeMode={activeMode} /> : <ChannelSubscribeButton/>
           }
         </div>
         <ul className="no-scrollbar sticky top-[66px] z-[2] flex flex-row gap-x-2 overflow-auto border-b-2 border-gray-400 bg-[#121212] py-2 sm:top-[82px]">
@@ -123,10 +140,25 @@ export default function Home() {
           </li>
         </ul>
         {/* <ChannelEmptyVideoPage/> */}
-        {activeTab == activeTabStatus.Video && <ChannelEmptyVideoPage />}
+        {/* {activeTab == activeTabStatus.Video && <ChannelEmptyVideoPage />}
         {activeTab == activeTabStatus.Playlist && <ChannelEmptyPlaylist />}
         {activeTab == activeTabStatus.Tweet && <ChannelEmptyTweet />}
-        {activeTab == activeTabStatus.Subscribed && <ChannelEmptySubScribed />}
+        {activeTab == activeTabStatus.Subscribed && <ChannelEmptySubScribed />} */}
+
+
+        {/**         {( <condition> ) && ( <result> )}             */}
+        {(activeTab==activeTabStatus.Video && activeMode == activeModeStatus.View ) && (<ChannelEmptyVideoPage/>)}
+        {(activeTab==activeTabStatus.Video && activeMode == activeModeStatus.Edit ) && (<OwnerChannelEmptyVideoPage/>)}
+
+        {(activeTab==activeTabStatus.Playlist && activeMode == activeModeStatus.View ) && (<ChannelEmptyPlaylist/>)}
+        {(activeTab==activeTabStatus.Playlist && activeMode == activeModeStatus.Edit ) && (<ChannelPlaylist/>)}
+
+        {(activeTab==activeTabStatus.Tweet && activeMode == activeModeStatus.View ) && (<ChannelEmptyTweet/>)}
+        {(activeTab==activeTabStatus.Tweet && activeMode == activeModeStatus.Edit ) && (<OwnerChannelEmptyTweetPage/>)}
+
+        {(activeTab==activeTabStatus.Subscribed && activeMode == activeModeStatus.View ) && (<ChannelEmptySubScribed/>)}
+        {(activeTab==activeTabStatus.Subscribed && activeMode == activeModeStatus.Edit ) && (<ChannelEmptySubScribed/>)}
+
       </div>
     </section>
   );

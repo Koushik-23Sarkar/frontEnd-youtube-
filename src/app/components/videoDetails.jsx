@@ -6,7 +6,7 @@ import { changeIsSearchBoxSelected } from "../searchSlice";
 import { Like } from "../lib/Likes/like.service";
 
 
-export default function VideoDetails({channelId,videoID}) {
+export default function VideoDetails({channelId,videoID,numOfLikes}) {
   const { isSearchBoxSelected } = useAppSelector((state) => state.search);
   const router = useRouter();
   const dispatch = useAppDispatch();
@@ -18,8 +18,8 @@ export default function VideoDetails({channelId,videoID}) {
   const handleTheVideoLikeButton = async ()=>{
     console.log("click to the like button")
     // create a like data
-    const response = await Like.video(videoID);
-    console.log(response);
+    // const response = await Like.video(videoID);
+    // console.log(response);
   }
   const handleTheVideoDislikeButton = ()=>{
     console.log("click to the dislike button")
@@ -46,8 +46,8 @@ export default function VideoDetails({channelId,videoID}) {
               <button
                 onClick={handleTheVideoLikeButton}
                 className="group/btn flex items-center gap-x-2 border-r border-gray-700 px-4 py-1.5 after:content-[attr(data-like)] hover:bg-white/10 focus:after:content-[attr(data-like-alt)]"
-                data-like="3050"
-                data-like-alt="3051"
+                data-like={numOfLikes}
+                data-like-alt={numOfLikes+1}
               >
                 <span className="inline-block w-5 group-focus/btn:text-[#ae7aff]">
                   <svg
@@ -69,8 +69,8 @@ export default function VideoDetails({channelId,videoID}) {
               <button
                 onClick={handleTheVideoDislikeButton}
                 className="group/btn flex items-center gap-x-2 px-4 py-1.5 after:content-[attr(data-like)] hover:bg-white/10 focus:after:content-[attr(data-like-alt)]"
-                data-like="20"
-                data-like-alt="21"
+                data-like="0"
+                data-like-alt="1"
               >
                 <span className="inline-block w-5 group-focus/btn:text-[#ae7aff]">
                   <svg
