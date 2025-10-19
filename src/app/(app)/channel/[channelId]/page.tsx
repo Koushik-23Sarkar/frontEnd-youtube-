@@ -14,6 +14,9 @@ import { useParams } from "next/navigation";
 import OwnChannelEditButton from "@/app/components/userAvater/ownChannelEditButton";
 import OwnerChannelEmptyVideoPage from "@/app/components/OwnerChannel/ownerChannelEmptyVideoPage";
 import OwnerChannelEmptyTweetPage from "@/app/components/OwnerChannel/ownerChannelEmptyTweetPage";
+import UploadVideoModelPopUp from "@/app/components/OwnerChannel/uploadVideoModelPopUp";
+import UploadingVideoModelPopUp from "@/app/components/OwnerChannel/uploadingVideoModelPopUp";
+import UploadedSuccessVideoModelPopUp from "@/app/components/OwnerChannel/uploadedSuccessVideoModelPopUp";
 
 enum activeTabStatus {
   Video = "video",
@@ -27,12 +30,20 @@ enum activeModeStatus {
   View = "viewMode"
 }
 
+enum videoPopUpStatus {
+  NoVideoPopUp  = "noVideoPopUp",
+  uploadVideoPop = "uploadVideoPopUp",
+  uploadingVideoPop = "uploadingVideoPop",
+  uploadedVideoPop ="uploadedVideoPopUp"
+}
+
 export default function Home() {
   const { isSearchBoxSelected } = useAppSelector((state) => state.search);
   const {user} = useAppSelector((state)=>{
     console.log(state);
     return state.auth;
   });
+  const [videoPopUp,setVideoPopUp] = useState<videoPopUpStatus>(videoPopUpStatus.NoVideoPopUp);
 
   const [activeTab, setActiveTab] = useState<activeTabStatus>(
     activeTabStatus.Video
@@ -57,9 +68,13 @@ export default function Home() {
     }
   }
 
+  const handleVideoPopUp = (value: string)=>{
+    setVideoPopUp(value);
+    console.log(value)
+  }
   
   return (
-    <section className="w-full pb-[70px] sm:ml-[70px] sm:pb-0 lg:ml-0">
+    <section className="relative w-full pb-[70px] sm:ml-[70px] sm:pb-0 lg:ml-0">
       <div className="relative min-h-[150px] w-full pt-[16.28%]">
         <div className="absolute inset-0 overflow-hidden">
           <img
@@ -148,7 +163,7 @@ export default function Home() {
 
         {/**         {( <condition> ) && ( <result> )}             */}
         {(activeTab==activeTabStatus.Video && activeMode == activeModeStatus.View ) && (<ChannelEmptyVideoPage/>)}
-        {(activeTab==activeTabStatus.Video && activeMode == activeModeStatus.Edit ) && (<OwnerChannelEmptyVideoPage/>)}
+        {(activeTab==activeTabStatus.Video && activeMode == activeModeStatus.Edit ) && (<OwnerChannelEmptyVideoPage handleVideoPopUp={handleVideoPopUp} />)}
 
         {(activeTab==activeTabStatus.Playlist && activeMode == activeModeStatus.View ) && (<ChannelEmptyPlaylist/>)}
         {(activeTab==activeTabStatus.Playlist && activeMode == activeModeStatus.Edit ) && (<ChannelPlaylist/>)}
@@ -160,6 +175,9 @@ export default function Home() {
         {(activeTab==activeTabStatus.Subscribed && activeMode == activeModeStatus.Edit ) && (<ChannelEmptySubScribed/>)}
 
       </div>
+      {videoPopUp==videoPopUpStatus.uploadVideoPop  && <UploadVideoModelPopUp handleVideoPopUp={handleVideoPopUp} />}
+      {videoPopUp==videoPopUpStatus.uploadingVideoPop  && <UploadingVideoModelPopUp handleVideoPopUp={handleVideoPopUp} />}
+      {videoPopUp==videoPopUpStatus.uploadedVideoPop  &&  <UploadedSuccessVideoModelPopUp handleVideoPopUp={handleVideoPopUp} /> }
     </section>
   );
 }

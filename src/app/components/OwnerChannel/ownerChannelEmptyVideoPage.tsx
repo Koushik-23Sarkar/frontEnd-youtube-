@@ -1,14 +1,5 @@
-"use client"
-import { useState } from "react";
 
-enum videoPopUpStatus {
-  NoVideoPopUp  = "noVideoPopUp",
-  uploadVideoPop = "uploadVideoPopUp",
-  uploadingVideoPop = "uploadingVideoPop",
-  uploadedVideoPop ="uploadedVideoPopUp"
-}
-export default function OwnerChannelEmptyVideoPage() {
-  const [videoPopUp,setVideoPopUp] = useState<videoPopUpStatus>(videoPopUpStatus.NoVideoPopUp);
+export default function OwnerChannelEmptyVideoPage({handleVideoPopUp}:{handleVideoPopUp:any}) {
   
   return (
     <div className="flex justify-center p-4">
@@ -37,7 +28,9 @@ export default function OwnerChannelEmptyVideoPage() {
           This page has yet to upload a video. Search another page in order to
           find more videos.
         </p>
-        <button className="mt-4 inline-flex items-center gap-x-2 bg-[#ae7aff] px-3 py-2 font-semibold text-black">
+        <button 
+          onClick={()=>handleVideoPopUp("uploadVideoPopUp")}
+        className="mt-4 inline-flex items-center gap-x-2 bg-[#ae7aff] px-3 py-2 font-semibold text-black">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -53,7 +46,7 @@ export default function OwnerChannelEmptyVideoPage() {
               d="M12 4.5v15m7.5-7.5h-15"
             ></path>
           </svg>{" "}
-          New video
+          New video upload
         </button>
       </div>
     </div>

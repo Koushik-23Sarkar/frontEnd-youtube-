@@ -1,4 +1,4 @@
-export default function UploadingVideoModelPopUp() {
+export default function UploadingVideoModelPopUp({handleVideoPopUp}:{handleVideoPopUp:any}) {
   return (
     <div className="absolute inset-x-0 top-0 z-10 flex h-[calc(100vh-66px)] items-center justify-center bg-black/50 px-4 pb-[86px] pt-4 sm:h-[calc(100vh-82px)] sm:px-14 sm:py-8">
       <div className="w-full max-w-lg overflow-auto rounded-lg border border-gray-700 bg-[#121212] p-4">
@@ -71,7 +71,9 @@ export default function UploadingVideoModelPopUp() {
           </div>
         </div>
         <div className="grid grid-cols-2 gap-4">
-          <button className="border px-4 py-3">Cancel</button>
+          <button 
+            onClick={()=>handleVideoPopUp("noVideoPopUp")}
+          className="border px-4 py-3">Cancel</button>
           <button
             class="bg-[#ae7aff] px-4 py-3 text-black disabled:bg-[#E4D3FF]"
             disabled=""
