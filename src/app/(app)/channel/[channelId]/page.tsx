@@ -265,16 +265,16 @@ export default function Home() {
         </ul>
         {/* <ChannelEmptyVideoPage/> */}
         {activeTab == activeTabStatus.Video && (
-          channelVideos?.length ? <ChannelVideoList/> : <ChannelEmptyVideoPage/>
+          channelVideos?.length ? <ChannelVideoList channelVideos={channelVideos} /> : <ChannelEmptyVideoPage/>
         )}
         {activeTab == activeTabStatus.Playlist && (
-          channelPlaylist?.length ? <ChannelPlaylist/> :<ChannelEmptyPlaylist />
-        )}
+          channelPlaylist?.length ? <ChannelPlaylist channelPlaylist={channelPlaylist} /> :<ChannelEmptyPlaylist />
+        )} 
         {activeTab == activeTabStatus.Tweet && (
-          channeTweets?.length ? <ChannelTweetPage/> :<ChannelEmptyTweet />
+          channeTweets?.length ? <ChannelTweetPage channeTweets={channeTweets} /> :<ChannelEmptyTweet />
         )}
         {activeTab == activeTabStatus.Subscribed && (
-          channelSubscribed?.length? <ChannelSubscribedPage/> : <ChannelEmptySubScribed />
+          channelSubscribed?.length? <ChannelSubscribedPage channelSubscribed={channelSubscribed} /> : <ChannelEmptySubScribed />
         )}
         {activeTab == activeTabStatus.PersonalInformation && (
           <PersonalInformationChange />
