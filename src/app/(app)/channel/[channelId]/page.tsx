@@ -26,6 +26,7 @@ import ChannelSubscribedPage from "@/app/components/channelSubscribedPage";
 import { Playlist } from "@/app/lib/Playlists/Playlists.service";
 import { Tweets } from "@/app/lib/Tweets/Tweets.service";
 import { Subscription } from "@/app/lib/Subscription/subscription.service";
+import { Users } from "@/app/lib/Users/users.service";
 
 enum activeTabStatus {
   Video = "video",
@@ -65,6 +66,11 @@ export default function Home() {
   const [channeTweets,setChannelTweets]=useState<any[] | null>(null);
   const [channelSubscribed,setChannelSubscribed] = useState<any[] | null>(null);
 
+  {/** state variable for channel information  */}
+  const [channelName,setChannelName] = useState('');
+  const [channelUsername,setChannelUsername] = useState('');
+  const [numberOfSubscriber,setNumberOfSubscriber] = useState(0);
+  const [numberOfSubscribedChannel,setNumberOfSubscribedChannel] = useState(0);
 
   console.log(channelId);
   console.log(user?._id);
@@ -92,6 +98,8 @@ export default function Home() {
   useEffect(()=>{
     async function fetchData(){
       if(channelId){
+        {/** fetch all the information of that channel */}
+        const channelData = await Users.getUserChannelProfileById(channelId);
         const videoData = await Videos.getChannelVideos(channelId);
         const playlistData = await Playlist.getUserPlaylists(channelId);
         const tweetsData = await Tweets.getUserTweets(channelId);
@@ -101,6 +109,11 @@ export default function Home() {
         console.log(playlistData);
         console.log(tweetsData)
         console.log(subscribedData)
+
+        setChannelName(channelData.fullName)
+        setChannelUsername(channelData.username)
+        setNumberOfSubscribedChannel(channelData.channelsSubscribedToCount)
+        setNumberOfSubscriber(channelData.subscribersCount)
 
         setChannelVideos(videoData);
         setChannelPlaylist(playlistData)
@@ -134,10 +147,10 @@ export default function Home() {
             />
           </span>
           <div className="mr-auto inline-block">
-            <h1 className="font-bolg text-xl">React Patterns</h1>
-            <p className="text-sm text-gray-400">@reactpatterns</p>
+            <h1 className="font-bolg text-xl">{channelName}</h1>
+            <p className="text-sm text-gray-400">@{channelUsername}</p>
             <p className="text-sm text-gray-400">
-              600k Subscribers · 220 Subscribed
+              {numberOfSubscriber} Subscribers · {numberOfSubscribedChannel} Subscribed
             </p>
           </div>
           {/** If i visit my own channel then Subscribe button become Edit button */}
