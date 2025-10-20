@@ -5,7 +5,7 @@ import ChannelVideoList from "../../../components/channelVideoListPage";
 import ChannelEmptyPlaylist from "../../../components/channelEmptyPlaylistPage";
 import ChannelPlaylist from "../../../components/channelPlaylistPage";
 import ChannelEmptyTweet from "../../../components/channelEmptyTweetPage";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ChannelEmptySubScribed from "@/app/components/channelEmptySubscribedPage";
 import SearchBoxCases from "@/app/components/SearchBox/serachBoxCases";
 import { useAppSelector } from "@/app/lib/hooks";
@@ -20,6 +20,12 @@ import UploadedSuccessVideoModelPopUp from "@/app/components/OwnerChannel/upload
 import PersonalInformationChange from "@/app/components/OwnerChannel/personalInformationChange";
 import { ChannelInformationChange } from "@/app/components/OwnerChannel/channelInformationChange";
 import ChannelPasswordChange from "@/app/components/OwnerChannel/channelPasswordChange";
+import { Videos } from "@/app/lib/Videos/Videos.service";
+import ChannelTweetPage from "@/app/components/channelTweetsPage";
+import ChannelSubscribedPage from "@/app/components/channelSubscribedPage";
+import { Playlist } from "@/app/lib/Playlists/Playlists.service";
+import { Tweets } from "@/app/lib/Tweets/Tweets.service";
+import { Subscription } from "@/app/lib/Subscription/subscription.service";
 
 enum activeTabStatus {
   Video = "video",
@@ -49,17 +55,17 @@ export default function Home() {
     console.log(state);
     return state.auth;
   });
-  const [videoPopUp, setVideoPopUp] = useState<videoPopUpStatus>(
-    videoPopUpStatus.NoVideoPopUp
-  );
-
-  const [activeTab, setActiveTab] = useState<activeTabStatus>(
-    activeTabStatus.Video
-  );
-  const [activeMode, setActiveMode] = useState<activeModeStatus>(
-    activeModeStatus.View
-  );
+  const [videoPopUp, setVideoPopUp] = useState<videoPopUpStatus>(videoPopUpStatus.NoVideoPopUp);
+  const [activeTab, setActiveTab] = useState<activeTabStatus>(activeTabStatus.Video);
+  const [activeMode, setActiveMode] = useState<activeModeStatus>(activeModeStatus.View);
   const { channelId } = useParams();
+
+  const [channelVideos, setChannelVideos] = useState<any[] | null>(null);
+  const [channelPlaylist,setChannelPlaylist] = useState<any[] | null>(null);
+  const [channeTweets,setChannelTweets]=useState<any[] | null>(null);
+  const [channelSubscribed,setChannelSubscribed] = useState<any[] | null>(null);
+
+
   console.log(channelId);
   console.log(user?._id);
 
@@ -82,6 +88,31 @@ export default function Home() {
     setVideoPopUp(value);
     console.log(value);
   };
+
+  useEffect(()=>{
+    async function fetchData(){
+      if(channelId){
+        const videoData = await Videos.getChannelVideos(channelId);
+        const playlistData = await Playlist.getUserPlaylists(channelId);
+        const tweetsData = await Tweets.getUserTweets(channelId);
+        const subscribedData = await Subscription.getSubscribedChannels(channelId);
+
+        console.log(videoData);
+        console.log(playlistData);
+        console.log(tweetsData)
+        console.log(subscribedData)
+
+        setChannelVideos(videoData);
+        setChannelPlaylist(playlistData)
+        setChannelSubscribed(subscribedData)
+        setChannelTweets(tweetsData);
+      }
+    }
+
+
+    fetchData();
+  },[])
+
 
   return (
     <section className="relative w-full pb-[70px] sm:ml-[70px] sm:pb-0 lg:ml-0">
@@ -220,10 +251,18 @@ export default function Home() {
           )}
         </ul>
         {/* <ChannelEmptyVideoPage/> */}
-        {activeTab == activeTabStatus.Video && <ChannelEmptyVideoPage />}
-        {activeTab == activeTabStatus.Playlist && <ChannelEmptyPlaylist />}
-        {activeTab == activeTabStatus.Tweet && <ChannelEmptyTweet />}
-        {activeTab == activeTabStatus.Subscribed && <ChannelEmptySubScribed />}
+        {activeTab == activeTabStatus.Video && (
+          channelVideos?.length ? <ChannelVideoList/> : <ChannelEmptyVideoPage/>
+        )}
+        {activeTab == activeTabStatus.Playlist && (
+          channelPlaylist?.length ? <ChannelPlaylist/> :<ChannelEmptyPlaylist />
+        )}
+        {activeTab == activeTabStatus.Tweet && (
+          channeTweets?.length ? <ChannelTweetPage/> :<ChannelEmptyTweet />
+        )}
+        {activeTab == activeTabStatus.Subscribed && (
+          channelSubscribed?.length? <ChannelSubscribedPage/> : <ChannelEmptySubScribed />
+        )}
         {activeTab == activeTabStatus.PersonalInformation && (
           <PersonalInformationChange />
         )}
