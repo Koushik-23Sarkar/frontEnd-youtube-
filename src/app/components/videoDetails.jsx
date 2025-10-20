@@ -1,31 +1,37 @@
-'use client'
+"use client";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/app/lib/hooks";
 import { changeIsSearchBoxSelected } from "../searchSlice";
 import { Like } from "../lib/Likes/like.service";
 
-
-export default function VideoDetails({channelId,videoID,numOfLikes}) {
+export default function VideoDetails({
+  channelId,
+  videoID,
+  numOfLikes,
+  videoDiscription,
+  videoTitle,
+  videoOwnerFullName,
+  videoViews,
+}) {
   const { isSearchBoxSelected } = useAppSelector((state) => state.search);
   const router = useRouter();
   const dispatch = useAppDispatch();
 
-  const getThatChannel = ()=>{
-    console.log("channel click!")
-    router.push("/channel/ckjhbasdcjhbdsac")
-  }
-  const handleTheVideoLikeButton = async ()=>{
-    console.log("click to the like button")
+  const getThatChannel = () => {
+    console.log("channel click!");
+    router.push("/channel/ckjhbasdcjhbdsac");
+  };
+  const handleTheVideoLikeButton = async () => {
+    console.log("click to the like button");
     // create a like data
     // const response = await Like.video(videoID);
     // console.log(response);
-  }
-  const handleTheVideoDislikeButton = ()=>{
-    console.log("click to the dislike button")
+  };
+  const handleTheVideoDislikeButton = () => {
+    console.log("click to the dislike button");
     // remove that like data
-
-  }
+  };
   return (
     <div
       className="group mb-4 w-full rounded-lg border p-4 duration-200 hover:bg-white/5 focus:bg-white/5"
@@ -34,9 +40,9 @@ export default function VideoDetails({channelId,videoID,numOfLikes}) {
     >
       <div className="flex flex-wrap gap-y-2">
         <div className="w-full md:w-1/2 lg:w-full xl:w-1/2">
-          <h1 className="text-lg font-bold">Advanced React Patterns</h1>
+          <h1 className="text-lg font-bold">{videoTitle}</h1>
           <p className="flex text-sm text-gray-200">
-            30,164 Views ·18 hours ago
+            {videoViews} Views ·18 hours ago
           </p>
         </div>
         <div className="w-full md:w-1/2 lg:w-full xl:w-1/2">
@@ -47,7 +53,7 @@ export default function VideoDetails({channelId,videoID,numOfLikes}) {
                 onClick={handleTheVideoLikeButton}
                 className="group/btn flex items-center gap-x-2 border-r border-gray-700 px-4 py-1.5 after:content-[attr(data-like)] hover:bg-white/10 focus:after:content-[attr(data-like-alt)]"
                 data-like={numOfLikes}
-                data-like-alt={numOfLikes+1}
+                data-like-alt={numOfLikes + 1}
               >
                 <span className="inline-block w-5 group-focus/btn:text-[#ae7aff]">
                   <svg
@@ -313,7 +319,10 @@ export default function VideoDetails({channelId,videoID,numOfLikes}) {
         </div>
       </div>
       <div className="mt-4 flex items-center justify-between">
-        <div onClick={()=>getThatChannel()} className="flex items-center gap-x-4">
+        <div
+          onClick={() => getThatChannel()}
+          className="flex items-center gap-x-4"
+        >
           <div className="mt-2 h-12 w-12 shrink-0">
             <img
               src="https://images.pexels.com/photos/18264716/pexels-photo-18264716/free-photo-of-man-people-laptop-internet.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
@@ -322,7 +331,7 @@ export default function VideoDetails({channelId,videoID,numOfLikes}) {
             />
           </div>
           <div className="block">
-            <p className="text-gray-200">React Patterns</p>
+            <p className="text-gray-200">{videoOwnerFullName}</p>
             <p className="text-sm text-gray-400">757K Subscribers</p>
           </div>
         </div>
@@ -354,10 +363,7 @@ export default function VideoDetails({channelId,videoID,numOfLikes}) {
         {" "}
         {/*description box section*/}
         <p className="text-sm">
-          🚀 Dive into the world of React with our latest tutorial series:
-          &quot;Advanced React Patterns&quot;! 🛠️ Whether you&#x27;re a seasoned
-          developer or just starting out, this series is designed to elevate
-          your React skills to the next level.
+          {videoDiscription}
         </p>
       </div>
     </div>
