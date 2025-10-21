@@ -17,32 +17,45 @@ export default function Home() {
   const { videoId } = useParams();
   const [channelId, setChannelId] = useState(null);
   const { isSearchBoxSelected } = useAppSelector((state) => state.search);
-  const [numOfLikes,setNumOfLikes] = useState(0);
+  const [numOfLikes, setNumOfLikes] = useState(0);
 
-  {/**  Video information states  */}
-  const [videoTitle,setVideoTitle] = useState('');
-  const [videoDiscription,setVideoDiscription]=useState('');
-  const [videoOwnerFullName,setVideoOwnerFullName]=useState('');
-  const [videoViews,setVideoViews]=useState(0);
-  const [channelSubscriber,setChannelSubscriber]=useState('')
+  {
+    /**  Video information states  */
+  }
+  const [videoTitle, setVideoTitle] = useState("");
+  const [videoDiscription, setVideoDiscription] = useState("");
+  const [videoOwnerFullName, setVideoOwnerFullName] = useState("");
+  const [videoViews, setVideoViews] = useState(0);
+  const [channelSubscriber, setChannelSubscriber] = useState("");
+  const [videoCreatedAt, setVideoCreatedAt] = useState("just now");
+  const [alreadyLiked, setAlreadyLiked] = useState(false);
 
-
-
-
+  const { user } = useAppSelector((state) => {
+    console.log(state);
+    return state.auth;
+  });
   useEffect(() => {
     const fetchThatVideo = async () => {
       const res = await axios.get(
         `http://localhost:8000/api/v1/videos/${videoId}`
       );
       console.log("Info about that video: ");
-      const videoData = res.data.data[0]
+      const videoData = res.data.data[0];
       console.log(videoData);
 
-      setVideoTitle(videoData.title)
-      setVideoDiscription(videoData.description)
-      setVideoOwnerFullName(videoData.owner[0].fullName)
-      setVideoViews(videoData.views)
+      setVideoTitle(videoData.title);
+      setVideoDiscription(videoData.description);
+      setVideoOwnerFullName(videoData.owner[0].fullName);
+      setVideoViews(videoData.views);
       // setChannelSubscriber(videoData)
+      setNumOfLikes(videoData.numberOfLikes);
+      
+      const value = videoData.like;
+      console.log("videoData.like", value);
+      const result = value.some((data)=>data.video==videoId && data.likedBy==user._id)
+      console.log("result: ", result);
+      setAlreadyLiked(result);
+      setVideoCreatedAt(videoData.createdAt);
     };
     fetchThatVideo();
   }, []);
@@ -68,20 +81,21 @@ export default function Home() {
     return <h1>Search History</h1>;
   }
 
-  
   return (
     <section className="w-full pb-[70px] sm:ml-[70px] sm:pb-0">
       <div className="flex w-full flex-wrap gap-4 p-4 lg:flex-nowrap">
         <div className="col-span-12 w-full">
           <VideoPlay />
-          <VideoDetails 
-            channelId={channelId} 
-            videoID={videoId} 
-            numOfLikes={numOfLikes}
+          <VideoDetails
+            channelId={channelId}
+            videoID={videoId}
+            numOfVideoLikes={numOfLikes}
             videoTitle={videoTitle}
             videoDiscription={videoDiscription}
             videoOwnerFullName={videoOwnerFullName}
             videoViews={videoViews}
+            videoCreatedAt={videoCreatedAt}
+            alreadyLiked={alreadyLiked}
           />
           <button className="peer w-full rounded-lg border p-4 text-left duration-200 hover:bg-white/5 focus:bg-white/5 sm:hidden">
             <h6 className="font-semibold">573 Comments...</h6>
