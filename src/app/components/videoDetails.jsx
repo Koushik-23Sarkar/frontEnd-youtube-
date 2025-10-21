@@ -7,6 +7,8 @@ import { Like } from "../lib/Likes/like.service";
 import { useEffect, useState } from "react";
 import { Playlist } from "../lib/Playlists/Playlists.service";
 import moment from "moment";
+import { Users } from "../lib/Users/users.service";
+import { Subscription } from "../lib/Subscription/subscription.service";
 
 export default function VideoDetails({
   channelId,
@@ -17,13 +19,15 @@ export default function VideoDetails({
   videoOwnerFullName,
   videoViews,
   videoCreatedAt,
-  alreadyLiked
+  alreadyLiked,
 }) {
   const { isSearchBoxSelected } = useAppSelector((state) => state.search);
   const router = useRouter();
   const [numOfLikes, setNumOfLikes] = useState(numOfVideoLikes);
   console.log("alreadyLiked", alreadyLiked);
-  const [userAction, setUserAction] = useState (alreadyLiked==true?"like":null);
+  const [userAction, setUserAction] = useState(
+    alreadyLiked == true ? "like" : null
+  );
   const { user } = useAppSelector((state) => {
     console.log(state);
     return state.auth;
@@ -31,6 +35,7 @@ export default function VideoDetails({
   const [playlistList, setPlaylistList] = useState();
   const dispatch = useAppDispatch();
   const [newPlaylistName, setNewPlalistName] = useState("");
+  const [subscribe, setSubscribed] = useState(false);   // at first, that should be false, then fetch data, and take decision based on that 
 
   const getThatChannel = () => {
     console.log("channel click!");
@@ -41,8 +46,8 @@ export default function VideoDetails({
     console.log("handle create playlist");
   };
   const handleTheVideoLikeButton = async () => {
-    console.log("click like button")
-    await Like.toggleVideoLike(videoID)
+    console.log("click like button");
+    await Like.toggleVideoLike(videoID);
     if (userAction === "like") {
       // Undo like
       setNumOfLikes(numOfLikes - 1);
@@ -54,6 +59,12 @@ export default function VideoDetails({
     }
   };
 
+  const handleSubscribed = async ()=>{
+    const data = await Subscription.toggleSubscription(channelId)
+    console.log(data);
+    setSubscribed(!subscribe);
+  }
+
   useEffect(() => {
     async function getPlaylistList() {
       // return array
@@ -61,6 +72,15 @@ export default function VideoDetails({
       setPlaylistList(response);
     }
     getPlaylistList();
+  }, []);
+
+  useEffect(() => {
+    const issubscribedChannel = async (channelId) => {
+      console.log("videoDetails", channelId)
+      const responce = await Users.getUserChannelProfileById(channelId);
+      return responce.isSubscribed;
+    };
+    setSubscribed(issubscribedChannel(channelId));
   }, []);
 
   return (
@@ -230,7 +250,11 @@ export default function VideoDetails({
           </div>
         </div>
         <div className="block">
-          <button className="group/btn mr-1 flex w-full items-center gap-x-2 bg-[#ae7aff] px-3 py-2 text-center font-bold text-black shadow-[5px_5px_0px_0px_#4f4e4e] transition-all duration-150 ease-in-out active:translate-x-[5px] active:translate-y-[5px] active:shadow-[0px_0px_0px_0px_#4f4e4e] sm:w-auto">
+          <button 
+            onClick={()=>{
+              handleSubscribed()
+            }}
+          className={`group/btn mr-1 flex w-full items-center gap-x-2 ${(subscribe==true)?("bg-[#e3ddee]"):("bg-[#ae7aff]")} px-3 py-2 text-center font-bold text-black shadow-[5px_5px_0px_0px_#4f4e4e] transition-all duration-150 ease-in-out active:translate-x-[5px] active:translate-y-[5px] active:shadow-[0px_0px_0px_0px_#4f4e4e] sm:w-auto`}>
             <span className="inline-block w-5">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -247,8 +271,11 @@ export default function VideoDetails({
                 ></path>
               </svg>
             </span>
-            <span className="group-focus/btn:hidden">Subscribe</span>
-            <span className="hidden group-focus/btn:block">Subscribed</span>
+            {subscribe == true ? (
+              <span className="group-focus/btn:block">Subscribed</span>
+            ) : (
+              <span className="group-focus/btn:block">Subscribe</span>
+            )}
           </button>
         </div>
       </div>

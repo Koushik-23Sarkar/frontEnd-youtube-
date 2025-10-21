@@ -31,4 +31,13 @@ export const Subscription = {
     console.log(responce.data.data.length);
     return responce.data.data.length;
   },
+  toggleSubscription: async (channelId:string)=>{
+    const responce = await axiosClient.post(
+      `http://localhost:8000/api/v1/subscriptions/c/${channelId}`
+    );
+    console.log(responce.data.data)
+    return responce.data.data
+  }
+
+
 };

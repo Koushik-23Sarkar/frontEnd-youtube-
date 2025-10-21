@@ -43,6 +43,7 @@ export default function Home() {
       const videoData = res.data.data[0];
       console.log(videoData);
 
+      setChannelId(videoData.owner[0]._id)
       setVideoTitle(videoData.title);
       setVideoDiscription(videoData.description);
       setVideoOwnerFullName(videoData.owner[0].fullName);
