@@ -36,14 +36,18 @@ export default function VideoDetails({
   const dispatch = useAppDispatch();
   const [newPlaylistName, setNewPlalistName] = useState("");
   const [subscribe, setSubscribed] = useState(false);   // at first, that should be false, then fetch data, and take decision based on that 
+  const [checkedBoxPlaylist,setCheckedBoxPlsylist] = useState(false)
 
   const getThatChannel = () => {
     console.log("channel click!");
     router.push("/channel/ckjhbasdcjhbdsac");
   };
 
-  const handleCreateNewPlaylist = () => {
+  const handleCreateNewPlaylist = async () => {
     console.log("handle create playlist");
+    const newPLaylist = await Playlist.createPlaylist(newPlaylistName);
+    setPlaylistList([...playlistList,newPLaylist]);
+    setNewPlalistName("")
   };
   const handleTheVideoLikeButton = async () => {
     console.log("click like button");
@@ -65,14 +69,29 @@ export default function VideoDetails({
     setSubscribed(!subscribe);
   }
 
+  const handleCheckedBoxPlaylist = async (videoid,playlistId,present)=>{
+    console.log("handleCheckedBoxPlaylist ", videoid,playlistId,present)
+    if(present){ // video is already present in the playlist, we need to remove that video
+      const responce = await Playlist.addVideoToPlaylist(videoid,playlistId);
+      console.log("handleCheckedBoxPlaylist remove", responce);
+      setCheckedBoxPlsylist(!checkedBoxPlaylist)
+    }else {
+      const responce = await Playlist.removeVideoFromPlaylist(videoid,playlistId);
+      console.log("handleCheckedBoxPlaylist add",responce)
+      setCheckedBoxPlsylist(!checkedBoxPlaylist)
+    }
+  }
+
   useEffect(() => {
     async function getPlaylistList() {
       // return array
+      console.log("getPlaylistList")
       const response = await Playlist.getUserPlaylists(user?._id);
+      console.log("getPlaylistList ",response)
       setPlaylistList(response);
     }
     getPlaylistList();
-  }, []);
+  }, [checkedBoxPlaylist]);
 
   useEffect(() => {
     const issubscribedChannel = async (channelId) => {
@@ -144,46 +163,21 @@ export default function VideoDetails({
                   Save to playlist
                 </h3>
                 <ul className="mb-4">
-                  <li className="mb-2 last:mb-0">
-                    <label
-                      className="group/label inline-flex cursor-pointer items-center gap-x-3"
-                      htmlFor="Collections-checkbox"
-                    >
-                      <input
-                        type="checkbox"
-                        className="peer hidden"
-                        id="Collections-checkbox"
-                      />
-                      <span className="inline-flex h-4 w-4 items-center justify-center rounded-[4px] border border-transparent bg-white text-white group-hover/label:border-[#ae7aff] peer-checked:border-[#ae7aff] peer-checked:text-[#ae7aff]">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          strokeWidth="3"
-                          stroke="currentColor"
-                          aria-hidden="true"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M4.5 12.75l6 6 9-13.5"
-                          ></path>
-                        </svg>
-                      </span>
-                      Collections
-                    </label>
-                  </li>
                   {playlistList?.length > 0 &&
                     playlistList.map((playlist) => (
                       <li className="mb-2 last:mb-0">
+                        {console.log("playlist section")}
                         <label
                           className="group/label inline-flex cursor-pointer items-center gap-x-3"
-                          htmlFor="Collections-checkbox"
+                          htmlFor={`Collections-checkbox-${playlist._id}`}
                         >
                           <input
                             type="checkbox"
+                            checked={playlist.videos.includes(videoID)}
+                            value={playlist._id}
+                            onChange={(e)=>handleCheckedBoxPlaylist(videoID,e.target.value,e.target.checked)}
                             className="peer hidden"
-                            id="Collections-checkbox"
+                            id={`Collections-checkbox-${playlist._id}`}
                           />
                           <span className="inline-flex h-4 w-4 items-center justify-center rounded-[4px] border border-transparent bg-white text-white group-hover/label:border-[#ae7aff] peer-checked:border-[#ae7aff] peer-checked:text-[#ae7aff]">
                             <svg
@@ -235,7 +229,7 @@ export default function VideoDetails({
       <div className="mt-4 flex items-center justify-between">
         <div
           onClick={() => getThatChannel()}
-          className="flex items-center gap-x-4"
+          className="flex items-center gap-x-4 cursor-pointer"
         >
           <div className="mt-2 h-12 w-12 shrink-0">
             <img
