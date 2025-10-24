@@ -5,13 +5,40 @@ import {
   changeSearchContant,
 } from "@/app/searchSlice";
 import { useAppDispatch, useAppSelector } from "@/app/lib/hooks";
+import { useState } from "react";
+
+enum leftSideSection {
+  home = "home",
+  likedVideo = "likedVideo",
+  history = "history",
+  myContent = "myContent",
+  collection = "collection",
+  subscribers = "subscribers",
+  support = "support",
+  settings = "settings"
+}
 
 export default function LeftSideBar() {
   const router = useRouter();
   const dispatch = useAppDispatch();
+  const [currentTab, setCurrentTab] = useState<leftSideSection>(
+    leftSideSection.home
+  );
 
-  const handleHomeButton = () => {
-    router.push("/");
+  const handleLeftSideSection = () => {
+    if (currentTab == leftSideSection.home) {
+      router.push("/");
+    } else if (currentTab == leftSideSection.likedVideo) {
+      router.push("/likedvideos");
+    } else if (currentTab == leftSideSection.history) {
+      router.push("/history");
+    } else if (currentTab == leftSideSection.collection) {
+      router.push("/collection");
+    } else if (currentTab == leftSideSection.myContent) {
+      router.push("/myContent");
+    } else if (currentTab == leftSideSection.subscribers) {
+      router.push("/subscribers");
+    }
     dispatch(changeIsSearchBoxSelected(false));
     dispatch(changeSearchContant(""));
   };
@@ -19,7 +46,7 @@ export default function LeftSideBar() {
   return (
     <aside
       onClick={() => {
-        console.log("click in the aside section")
+        console.log("click in the aside section");
         dispatch(changeIsSearchBoxSelected(false));
         dispatch(changeSearchContant(""));
       }}
@@ -28,8 +55,13 @@ export default function LeftSideBar() {
       <ul className="flex justify-around gap-y-2 sm:sticky sm:top-[106px] sm:min-h-[calc(100vh-130px)] sm:flex-col">
         <li className="">
           <button
-            onClick={() => handleHomeButton()}
-            className="flex flex-col items-center justify-center border-white py-1 focus:text-[#ae7aff] sm:w-full sm:flex-row sm:border sm:p-1.5 sm:hover:bg-[#ae7aff] sm:hover:text-black sm:focus:border-[#ae7aff] sm:focus:bg-[#ae7aff] sm:focus:text-black sm:group-hover:justify-start sm:group-hover:px-4 lg:justify-start lg:px-4"
+            onClick={() => {
+              setCurrentTab(leftSideSection.home);
+              handleLeftSideSection();
+            }}
+            className={`flex flex-col items-center justify-center 
+              ${currentTab === leftSideSection.home ? "bg-[#ae7aff] text-black" : ""}
+            border-white py-1 focus:text-[#ae7aff] sm:w-full sm:flex-row sm:border sm:p-1.5 sm:hover:bg-[#ae7aff] sm:hover:text-black sm:focus:border-[#ae7aff] sm:focus:bg-[#ae7aff] sm:focus:text-black sm:group-hover:justify-start sm:group-hover:px-4 lg:justify-start lg:px-4`}
           >
             <span className="inline-block w-5 shrink-0 sm:group-hover:mr-4 lg:mr-4">
               <svg
@@ -53,7 +85,15 @@ export default function LeftSideBar() {
           </button>
         </li>
         <li className="hidden sm:block">
-          <button className="flex flex-col items-center justify-center border-white py-1 focus:text-[#ae7aff] sm:w-full sm:flex-row sm:border sm:p-1.5 sm:hover:bg-[#ae7aff] sm:hover:text-black sm:focus:border-[#ae7aff] sm:focus:bg-[#ae7aff] sm:focus:text-black sm:group-hover:justify-start sm:group-hover:px-4 lg:justify-start lg:px-4">
+          <button
+            onClick={() => {
+              setCurrentTab(leftSideSection.likedVideo);
+              handleLeftSideSection()
+            }}
+            className={`flex flex-col items-center justify-center 
+              ${currentTab === leftSideSection.likedVideo ? "bg-[#ae7aff] text-black" : ""}
+              border-white py-1 focus:text-[#ae7aff] sm:w-full sm:flex-row sm:border sm:p-1.5 sm:hover:bg-[#ae7aff] sm:hover:text-black sm:focus:border-[#ae7aff] sm:focus:bg-[#ae7aff] sm:focus:text-black sm:group-hover:justify-start sm:group-hover:px-4 lg:justify-start lg:px-4`}
+          >
             <span className="inline-block w-5 shrink-0 sm:group-hover:mr-4 lg:mr-4">
               <svg
                 style={{ width: "100%" }}
@@ -76,7 +116,15 @@ export default function LeftSideBar() {
           </button>
         </li>
         <li className="">
-          <button className="flex flex-col items-center justify-center border-white py-1 focus:text-[#ae7aff] sm:w-full sm:flex-row sm:border sm:p-1.5 sm:hover:bg-[#ae7aff] sm:hover:text-black sm:focus:border-[#ae7aff] sm:focus:bg-[#ae7aff] sm:focus:text-black sm:group-hover:justify-start sm:group-hover:px-4 lg:justify-start lg:px-4">
+          <button
+            onClick={() => {
+              setCurrentTab(leftSideSection.history)
+               handleLeftSideSection();
+            }}
+            className={`flex flex-col items-center justify-center
+                ${currentTab === leftSideSection.history ? "bg-[#ae7aff] text-black" : ""}
+              border-white py-1 focus:text-[#ae7aff] sm:w-full sm:flex-row sm:border sm:p-1.5 sm:hover:bg-[#ae7aff] sm:hover:text-black sm:focus:border-[#ae7aff] sm:focus:bg-[#ae7aff] sm:focus:text-black sm:group-hover:justify-start sm:group-hover:px-4 lg:justify-start lg:px-4`}
+          >
             <span className="inline-block w-5 shrink-0 sm:group-hover:mr-4 lg:mr-4">
               <svg
                 style={{ width: "100%" }}
@@ -99,7 +147,15 @@ export default function LeftSideBar() {
           </button>
         </li>
         <li className="hidden sm:block">
-          <button className="flex flex-col items-center justify-center border-white py-1 focus:text-[#ae7aff] sm:w-full sm:flex-row sm:border sm:p-1.5 sm:hover:bg-[#ae7aff] sm:hover:text-black sm:focus:border-[#ae7aff] sm:focus:bg-[#ae7aff] sm:focus:text-black sm:group-hover:justify-start sm:group-hover:px-4 lg:justify-start lg:px-4">
+          <button
+            onClick={() => {
+              setCurrentTab(leftSideSection.myContent)
+              handleLeftSideSection()
+            }}
+            className={`flex flex-col items-center justify-center 
+              ${currentTab === leftSideSection.myContent ? "bg-[#ae7aff] text-black" : ""}
+              border-white py-1 focus:text-[#ae7aff] sm:w-full sm:flex-row sm:border sm:p-1.5 sm:hover:bg-[#ae7aff] sm:hover:text-black sm:focus:border-[#ae7aff] sm:focus:bg-[#ae7aff] sm:focus:text-black sm:group-hover:justify-start sm:group-hover:px-4 lg:justify-start lg:px-4`}
+          >
             <span className="inline-block w-5 shrink-0 sm:group-hover:mr-4 lg:mr-4">
               <svg
                 style={{ width: "100%" }}
@@ -129,7 +185,16 @@ export default function LeftSideBar() {
           </button>
         </li>
         <li className="">
-          <button className="flex flex-col items-center justify-center border-white py-1 focus:text-[#ae7aff] sm:w-full sm:flex-row sm:border sm:p-1.5 sm:hover:bg-[#ae7aff] sm:hover:text-black sm:focus:border-[#ae7aff] sm:focus:bg-[#ae7aff] sm:focus:text-black sm:group-hover:justify-start sm:group-hover:px-4 lg:justify-start lg:px-4">
+          <button
+            onClick={() => {
+              setCurrentTab(leftSideSection.collection)
+              handleLeftSideSection();
+            }}
+            className=
+            {`flex flex-col items-center justify-center
+              ${currentTab === leftSideSection.collection ? "bg-[#ae7aff] text-black" : ""}
+              border-white py-1 focus:text-[#ae7aff] sm:w-full sm:flex-row sm:border sm:p-1.5 sm:hover:bg-[#ae7aff] sm:hover:text-black sm:focus:border-[#ae7aff] sm:focus:bg-[#ae7aff] sm:focus:text-black sm:group-hover:justify-start sm:group-hover:px-4 lg:justify-start lg:px-4`}
+          >
             <span className="inline-block w-5 shrink-0 sm:group-hover:mr-4 lg:mr-4">
               <svg
                 style={{ width: "100%" }}
@@ -152,7 +217,15 @@ export default function LeftSideBar() {
           </button>
         </li>
         <li className="">
-          <button className="flex flex-col items-center justify-center border-white py-1 focus:text-[#ae7aff] sm:w-full sm:flex-row sm:border sm:p-1.5 sm:hover:bg-[#ae7aff] sm:hover:text-black sm:focus:border-[#ae7aff] sm:focus:bg-[#ae7aff] sm:focus:text-black sm:group-hover:justify-start sm:group-hover:px-4 lg:justify-start lg:px-4">
+          <button
+            onClick={() => {
+              setCurrentTab(leftSideSection.subscribers)
+              handleLeftSideSection()
+            }}
+            className={`flex flex-col items-center justify-center
+              ${currentTab === leftSideSection.subscribers ? "bg-[#ae7aff] text-black" : ""}
+              border-white py-1 focus:text-[#ae7aff] sm:w-full sm:flex-row sm:border sm:p-1.5 sm:hover:bg-[#ae7aff] sm:hover:text-black sm:focus:border-[#ae7aff] sm:focus:bg-[#ae7aff] sm:focus:text-black sm:group-hover:justify-start sm:group-hover:px-4 lg:justify-start lg:px-4`}
+          >
             <span className="inline-block w-5 shrink-0 sm:group-hover:mr-4 lg:mr-4">
               <svg
                 style={{ width: "100%" }}
@@ -175,7 +248,12 @@ export default function LeftSideBar() {
           </button>
         </li>
         <li className="hidden sm:block mt-auto">
-          <button className="flex flex-col items-center justify-center border-white py-1 focus:text-[#ae7aff] sm:w-full sm:flex-row sm:border sm:p-1.5 sm:hover:bg-[#ae7aff] sm:hover:text-black sm:focus:border-[#ae7aff] sm:focus:bg-[#ae7aff] sm:focus:text-black sm:group-hover:justify-start sm:group-hover:px-4 lg:justify-start lg:px-4">
+          <button
+            onClick={() => {
+              setCurrentTab(leftSideSection.support)
+            }}
+            className="flex flex-col items-center justify-center border-white py-1 focus:text-[#ae7aff] sm:w-full sm:flex-row sm:border sm:p-1.5 sm:hover:bg-[#ae7aff] sm:hover:text-black sm:focus:border-[#ae7aff] sm:focus:bg-[#ae7aff] sm:focus:text-black sm:group-hover:justify-start sm:group-hover:px-4 lg:justify-start lg:px-4"
+          >
             <span className="inline-block w-5 shrink-0 sm:group-hover:mr-4 lg:mr-4">
               <svg
                 style={{ width: "100%" }}
@@ -198,7 +276,12 @@ export default function LeftSideBar() {
           </button>
         </li>
         <li className="hidden sm:block">
-          <button className="flex flex-col items-center justify-center border-white py-1 focus:text-[#ae7aff] sm:w-full sm:flex-row sm:border sm:p-1.5 sm:hover:bg-[#ae7aff] sm:hover:text-black sm:focus:border-[#ae7aff] sm:focus:bg-[#ae7aff] sm:focus:text-black sm:group-hover:justify-start sm:group-hover:px-4 lg:justify-start lg:px-4">
+          <button
+            onClick={() => {
+              setCurrentTab(leftSideSection.settings)
+            }}
+            className="flex flex-col items-center justify-center border-white py-1 focus:text-[#ae7aff] sm:w-full sm:flex-row sm:border sm:p-1.5 sm:hover:bg-[#ae7aff] sm:hover:text-black sm:focus:border-[#ae7aff] sm:focus:bg-[#ae7aff] sm:focus:text-black sm:group-hover:justify-start sm:group-hover:px-4 lg:justify-start lg:px-4"
+          >
             <span className="inline-block w-5 shrink-0 sm:group-hover:mr-4 lg:mr-4">
               <svg
                 style={{ width: "100%" }}

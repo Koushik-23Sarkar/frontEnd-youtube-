@@ -3,6 +3,7 @@ import VideoCardComponent from "../components/videoCardComponent";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Loading from "./loader";
+import axiosClient from "../utils/axiosClient";
 
 
 export default function HomePageVideo() {
@@ -12,7 +13,7 @@ export default function HomePageVideo() {
   useEffect(() => {
     const fetchVideos = async () => {
       try {
-        const res = await axios.get("http://localhost:8000/api/v1/videos");
+        const res = await axiosClient.get("http://localhost:8000/api/v1/videos");
         setVideos(res.data.data.docs);
       } catch (err) {
         console.error("Error fetching videos:", err);

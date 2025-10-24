@@ -26,11 +26,17 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+  const handleLeftSideSection = ()=>{
+    console.log("handleLeftSideSection")
+  }
+
   return (
     <div className="h-screen overflow-y-auto bg-[#121212] text-white">
       <HeaderComponent />
       <div className="flex min-h-[calc(100vh-66px)] sm:min-h-[calc(100vh-82px)]">
-        <LeftSideBar />
+        <LeftSideBar 
+        />
         {children}
       </div>
     </div>
