@@ -11,11 +11,11 @@ enum leftSideSection {
   home = "home",
   likedVideo = "likedVideo",
   history = "history",
-  myContent = "myContent",
-  collection = "collection",
-  subscribers = "subscribers",
+  // myContent = "myContent",
+  // collection = "collection",
+  // subscribers = "subscribers",
   support = "support",
-  settings = "settings"
+  admin = "admin"
 }
 
 export default function LeftSideBar() {
@@ -26,19 +26,6 @@ export default function LeftSideBar() {
   );
 
   const handleLeftSideSection = () => {
-    if (currentTab == leftSideSection.home) {
-      router.push("/");
-    } else if (currentTab == leftSideSection.likedVideo) {
-      router.push("/likedvideos");
-    } else if (currentTab == leftSideSection.history) {
-      router.push("/history");
-    } else if (currentTab == leftSideSection.collection) {
-      router.push("/collection");
-    } else if (currentTab == leftSideSection.myContent) {
-      router.push("/myContent");
-    } else if (currentTab == leftSideSection.subscribers) {
-      router.push("/subscribers");
-    }
     dispatch(changeIsSearchBoxSelected(false));
     dispatch(changeSearchContant(""));
   };
@@ -57,7 +44,7 @@ export default function LeftSideBar() {
           <button
             onClick={() => {
               setCurrentTab(leftSideSection.home);
-              handleLeftSideSection();
+              router.push("/");
             }}
             className={`flex flex-col items-center justify-center 
               ${currentTab === leftSideSection.home ? "bg-[#ae7aff] text-black" : ""}
@@ -88,7 +75,7 @@ export default function LeftSideBar() {
           <button
             onClick={() => {
               setCurrentTab(leftSideSection.likedVideo);
-              handleLeftSideSection()
+              router.push("/likedvideos")
             }}
             className={`flex flex-col items-center justify-center 
               ${currentTab === leftSideSection.likedVideo ? "bg-[#ae7aff] text-black" : ""}
@@ -119,7 +106,7 @@ export default function LeftSideBar() {
           <button
             onClick={() => {
               setCurrentTab(leftSideSection.history)
-               handleLeftSideSection();
+               router.push("/history");
             }}
             className={`flex flex-col items-center justify-center
                 ${currentTab === leftSideSection.history ? "bg-[#ae7aff] text-black" : ""}
@@ -146,11 +133,11 @@ export default function LeftSideBar() {
             </span>
           </button>
         </li>
-        <li className="hidden sm:block">
+        {/* <li className="hidden sm:block">
           <button
             onClick={() => {
               setCurrentTab(leftSideSection.myContent)
-              handleLeftSideSection()
+              router.push("/myContent");
             }}
             className={`flex flex-col items-center justify-center 
               ${currentTab === leftSideSection.myContent ? "bg-[#ae7aff] text-black" : ""}
@@ -188,7 +175,7 @@ export default function LeftSideBar() {
           <button
             onClick={() => {
               setCurrentTab(leftSideSection.collection)
-              handleLeftSideSection();
+              router.push("/collection");
             }}
             className=
             {`flex flex-col items-center justify-center
@@ -220,7 +207,7 @@ export default function LeftSideBar() {
           <button
             onClick={() => {
               setCurrentTab(leftSideSection.subscribers)
-              handleLeftSideSection()
+              router.push("/subscribers");
             }}
             className={`flex flex-col items-center justify-center
               ${currentTab === leftSideSection.subscribers ? "bg-[#ae7aff] text-black" : ""}
@@ -246,11 +233,12 @@ export default function LeftSideBar() {
               Subscribers
             </span>
           </button>
-        </li>
+        </li> */}
         <li className="hidden sm:block mt-auto">
           <button
             onClick={() => {
               setCurrentTab(leftSideSection.support)
+              router.push("/support")
             }}
             className="flex flex-col items-center justify-center border-white py-1 focus:text-[#ae7aff] sm:w-full sm:flex-row sm:border sm:p-1.5 sm:hover:bg-[#ae7aff] sm:hover:text-black sm:focus:border-[#ae7aff] sm:focus:bg-[#ae7aff] sm:focus:text-black sm:group-hover:justify-start sm:group-hover:px-4 lg:justify-start lg:px-4"
           >
@@ -278,7 +266,8 @@ export default function LeftSideBar() {
         <li className="hidden sm:block">
           <button
             onClick={() => {
-              setCurrentTab(leftSideSection.settings)
+              setCurrentTab(leftSideSection.admin)
+              router.push("/admin")
             }}
             className="flex flex-col items-center justify-center border-white py-1 focus:text-[#ae7aff] sm:w-full sm:flex-row sm:border sm:p-1.5 sm:hover:bg-[#ae7aff] sm:hover:text-black sm:focus:border-[#ae7aff] sm:focus:bg-[#ae7aff] sm:focus:text-black sm:group-hover:justify-start sm:group-hover:px-4 lg:justify-start lg:px-4"
           >
@@ -306,7 +295,7 @@ export default function LeftSideBar() {
               </svg>
             </span>
             <span className="block sm:hidden sm:group-hover:inline lg:inline">
-              Settings
+              admin
             </span>
           </button>
         </li>

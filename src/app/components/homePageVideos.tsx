@@ -1,10 +1,9 @@
-"use client"
+"use client";
 import VideoCardComponent from "../components/videoCardComponent";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Loading from "./loader";
 import axiosClient from "../utils/axiosClient";
-
 
 export default function HomePageVideo() {
   const [videos, setVideos] = useState([]);
@@ -13,7 +12,9 @@ export default function HomePageVideo() {
   useEffect(() => {
     const fetchVideos = async () => {
       try {
-        const res = await axiosClient.get("http://localhost:8000/api/v1/videos");
+        const res = await axiosClient.get(
+          "http://localhost:8000/api/v1/videos"
+        );
         setVideos(res.data.data.docs);
       } catch (err) {
         console.error("Error fetching videos:", err);
@@ -24,23 +25,31 @@ export default function HomePageVideo() {
     fetchVideos();
   }, []);
 
-  if (loading) return <Loading />; // ✅ show loading before data
+  if (loading)
+    return (
+      <section className="w-full pb-[70px] sm:ml-[70px] sm:pb-0 lg:ml-0">
+        <div className="flex items-center justify-center h-screen">
+          <Loading />
+        </div>
+      </section>
+    ); // ✅ show loading before data
 
   return (
     <section className="w-full pb-[70px] sm:ml-[70px] sm:pb-0 lg:ml-0">
       <div className="grid grid-cols-[repeat(auto-fit,_minmax(300px,_1fr))] gap-4 p-4">
         {videos.length > 0 ? (
-            videos.map((video) => (
-                <VideoCardComponent
-                    key={video.title} // ✅ add key
-                    title={video.title}
-                    thumbnail={video.thumbnail}
-                    views={video.views}
-                    videoId={video._id}
-                    avatar={video.owner?.avatar}
-                    createdTime={video.createdAt} owner={undefined}
-                />
-            ))
+          videos.map((video) => (
+            <VideoCardComponent
+              key={video.title} // ✅ add key
+              title={video.title}
+              thumbnail={video.thumbnail}
+              views={video.views}
+              videoId={video._id}
+              avatar={video.owner?.avatar}
+              createdTime={video.createdAt}
+              owner={undefined}
+            />
+          ))
         ) : (
           <p className="text-center w-full col-span-full text-gray-400">
             No videos available.

@@ -7,6 +7,7 @@ import UserAvter from "./userAvater/userAvater";
 
 export default function HeaderComponent() {
   const { isAuthenticated,user } = useAppSelector((state) => state.auth);
+  
   return (
     <header className="sticky inset-x-0 top-0 z-50 w-full border-b border-white bg-[#121212] px-4">
       <nav className="mx-auto flex max-w-7xl items-center py-2">

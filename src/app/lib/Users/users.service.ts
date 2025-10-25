@@ -11,7 +11,10 @@ export const Users = {
   },
   getWatchHistory: async ()=>{
     const responce = await axiosClient.get(
-      `http://localhost:8000/api/v1/users/history`
+      `http://localhost:8000/api/v1/users/history`,
+      {
+        withCredentials: true, // 🔥 important line
+      }
     );
     console.log(responce.data.data) 
     return responce.data.data   // return array
