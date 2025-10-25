@@ -43,7 +43,7 @@ export default function home(){
                         title={video.videoDetails.title}
                         views={video.videoDetails.views}
                         description={video.videoDetails.description}
-                        videoId={video.video}
+                        videoId={video.videoDetails._id}
                     />)
                 )
             )  : (<h1> No histories </h1>)

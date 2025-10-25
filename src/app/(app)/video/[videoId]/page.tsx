@@ -37,7 +37,7 @@ export default function Home() {
   useEffect(() => {
     const fetchThatVideo = async () => {
       const res = await axios.get(
-        `http://localhost:8000/api/v1/videos/${videoId}`
+        `http://localhost:8000/api/v1/videos/${videoId}`,{withCredentials:true}
       );
       console.log("Info about that video: ");
       const videoData = res.data.data[0];
@@ -64,7 +64,7 @@ export default function Home() {
   useEffect(() => {
     const fetchSuggestionVideos = async () => {
       try {
-        const res = await axios.get("http://localhost:8000/api/v1/videos");
+        const res = await axios.get("http://localhost:8000/api/v1/videos", {withCredentials:true});
         setVideos(res.data.data.docs);
       } catch (err) {
         console.error("Error fetching videos:", err);
