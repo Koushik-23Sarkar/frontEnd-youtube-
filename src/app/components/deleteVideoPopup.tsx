@@ -45,7 +45,9 @@ export default function DeleteVideoPopup({onActiveTabChange}) {
           </button>
         </div>
         <div className="grid grid-cols-2 gap-4">
-          <button className="col-span-2 border px-4 py-3 sm:col-span-1">
+          <button 
+            onClick={() => onActiveTabChange(null)}
+            className="col-span-2 border px-4 py-3 sm:col-span-1">
             Cancel
           </button>
           <button className="col-span-2 bg-red-700 px-4 py-3 disabled:bg-[#E4D3FF] sm:col-span-1">

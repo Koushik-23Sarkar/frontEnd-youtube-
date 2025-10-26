@@ -1,22 +1,75 @@
-export default function TableDataAdmin({onActiveTabChange}) {
+"use client";
+import { useState } from "react";
+import { Videos } from "../lib/Videos/Videos.service";
+
+export default function TableDataAdmin({
+  onActiveTabChange,
+  numberOfLikes,
+  createdAtDate,
+  isPublished: publishData,
+  videoTitle,
+  id
+}: {
+  onActiveTabChange: any;
+  numberOfLikes: string | number;
+  createdAtDate: string;
+  isPublished: boolean;
+  videoTitle: string;
+  id:string
+}) {
+  const [isPublished, setIsPublished] = useState(publishData);
+  const handleToggle = async () => {
+    try{
+      await Videos.togglePublishStatus(id)
+      console.log("handleToggle")
+      setIsPublished((prev)=>(!prev));
+    }catch(err){
+      console.log("handleToggle", err);
+    }
+
+  }
   return (
     <tr className="group border">
       <td className="border-collapse border-b border-gray-600 px-4 py-3 group-last:border-none">
         <div className="flex justify-center">
           <label
-            for="vid-pub-2"
+            htmlFor={`vid-pub-${id}`}
             className="relative inline-block w-12 cursor-pointer overflow-hidden"
           >
-            <input type="checkbox" id="vid-pub-2" className="peer sr-only" />
-            <span className="inline-block h-6 w-full rounded-2xl bg-gray-200 duration-200 after:absolute after:bottom-1 after:left-1 after:top-1 after:h-4 after:w-4 after:rounded-full after:bg-black after:duration-200 peer-checked:bg-[#ae7aff] peer-checked:after:left-7"></span>
+            {/* Hidden checkbox */}
+            <input
+              type="checkbox"
+              id={`vid-pub-${id}`}
+              defaultChecked={isPublished}
+              onChange={handleToggle}
+              className="sr-only"
+            />
+
+            {/* Toggle track + knob */}
+            <span
+              className={`inline-block h-6 w-full rounded-2xl duration-200 relative 
+            ${isPublished ? "bg-[#ae7aff]" : "bg-gray-200"}`}
+            >
+              {/* knob (after-element simulation) */}
+              <span
+                className={`absolute top-1 h-4 w-4 rounded-full bg-black duration-200
+              ${isPublished ? "left-7" : "left-1"}`}
+              ></span>
+            </span>
           </label>
         </div>
       </td>
       <td className="border-collapse border-b border-gray-600 px-4 py-3 group-last:border-none">
         <div className="flex justify-center">
-          <span className="inline-block rounded-2xl border px-1.5 py-0.5 border-orange-600 text-orange-600">
-            Unpublished
-          </span>
+          {isPublished ? (
+            <span className="inline-block rounded-2xl border px-1.5 py-0.5 border-green-600 text-green-600">
+              Published
+            </span>
+          ) : (
+            <span className="inline-block rounded-2xl border px-1.5 py-0.5 border-orange-600 text-orange-600">
+              Unpublished
+            </span>
+          )}
         </div>
       </td>
       <td className="border-collapse border-b border-gray-600 px-4 py-3 group-last:border-none">
@@ -26,27 +79,25 @@ export default function TableDataAdmin({onActiveTabChange}) {
             src="https://images.pexels.com/photos/3532552/pexels-photo-3532552.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
             alt="React Ninja"
           />
-          <h3 className="font-semibold">
-            React Hooks Explained: useState and useEffect
-          </h3>
+          <h3 className="font-semibold">{videoTitle}</h3>
         </div>
       </td>
       <td className="border-collapse border-b border-gray-600 px-4 py-3 group-last:border-none">
         <div className="flex justify-center gap-4">
           <span className="inline-block rounded-xl bg-green-200 px-1.5 py-0.5 text-green-700">
-            2520 likes
-          </span>
-          <span className="inline-block rounded-xl bg-red-200 px-1.5 py-0.5 text-red-700">
-            279 dislikes
+            {numberOfLikes} likes
           </span>
         </div>
       </td>
       <td className="border-collapse border-b border-gray-600 px-4 py-3 group-last:border-none">
-        9/21/2023
+        {createdAtDate}
       </td>
       <td className="border-collapse border-b border-gray-600 px-4 py-3 group-last:border-none">
         <div className="flex gap-4">
-          <button onClick={()=>onActiveTabChange("deletePopup")} className="h-5 w-5 hover:text-[#ae7aff]">
+          <button
+            onClick={() => onActiveTabChange("deletePopup")}
+            className="h-5 w-5 hover:text-[#ae7aff]"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -62,7 +113,10 @@ export default function TableDataAdmin({onActiveTabChange}) {
               ></path>
             </svg>
           </button>
-          <button onClick={()=>onActiveTabChange("editPopup")} className="h-5 w-5 hover:text-[#ae7aff]">
+          <button
+            onClick={() => onActiveTabChange("editPopup")}
+            className="h-5 w-5 hover:text-[#ae7aff]"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"

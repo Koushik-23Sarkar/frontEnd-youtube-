@@ -1,4 +1,4 @@
-export default function ChannelInfoCardAdmin() {
+export default function ChannelInfoCardAdmin({title,number}:{title:string,number:number}) {
   return (
     <div className="border p-4">
       <div className="mb-4 block">
@@ -24,8 +24,8 @@ export default function ChannelInfoCardAdmin() {
           </svg>
         </span>
       </div>
-      <h6 className="text-gray-300">Total views</h6>
-      <p className="text-3xl font-semibold">221,234</p>
+      <h6 className="text-gray-300">Total {title}</h6>
+      <p className="text-3xl font-semibold">{number}</p>
     </div>
   );
 }

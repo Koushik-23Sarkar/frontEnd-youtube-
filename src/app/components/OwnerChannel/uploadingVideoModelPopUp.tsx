@@ -75,7 +75,7 @@ export default function UploadingVideoModelPopUp({handleVideoPopUp}:{handleVideo
             onClick={()=>handleVideoPopUp("noVideoPopUp")}
           className="border px-4 py-3">Cancel</button>
           <button
-            class="bg-[#ae7aff] px-4 py-3 text-black disabled:bg-[#E4D3FF]"
+            className="bg-[#ae7aff] px-4 py-3 text-black disabled:bg-[#E4D3FF]"
             disabled=""
           >
             Finish
