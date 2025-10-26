@@ -8,14 +8,16 @@ export default function TableDataAdmin({
   createdAtDate,
   isPublished: publishData,
   videoTitle,
-  id
+  id,
+  getupdateOrDeleteVideoId
 }: {
   onActiveTabChange: any;
   numberOfLikes: string | number;
   createdAtDate: string;
   isPublished: boolean;
   videoTitle: string;
-  id:string
+  id:string;
+  getupdateOrDeleteVideoId:any;
 }) {
   const [isPublished, setIsPublished] = useState(publishData);
   const handleToggle = async () => {
@@ -95,7 +97,10 @@ export default function TableDataAdmin({
       <td className="border-collapse border-b border-gray-600 px-4 py-3 group-last:border-none">
         <div className="flex gap-4">
           <button
-            onClick={() => onActiveTabChange("deletePopup")}
+            onClick={() => {
+              getupdateOrDeleteVideoId(id)
+              onActiveTabChange("deletePopup")
+            }}
             className="h-5 w-5 hover:text-[#ae7aff]"
           >
             <svg
@@ -114,7 +119,10 @@ export default function TableDataAdmin({
             </svg>
           </button>
           <button
-            onClick={() => onActiveTabChange("editPopup")}
+            onClick={() => {
+              getupdateOrDeleteVideoId(id)
+              onActiveTabChange("editPopup")
+            }}
             className="h-5 w-5 hover:text-[#ae7aff]"
           >
             <svg

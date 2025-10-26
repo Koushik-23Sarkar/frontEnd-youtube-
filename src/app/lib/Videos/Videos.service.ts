@@ -13,15 +13,20 @@ export const Videos = {
   },
   deleteVideo: async (videoId: string) => {
     const responce = await axiosClient.delete(
-      `http://localhost:8000/api/v1/videos?videoId=${videoId}`
+      `http://localhost:8000/api/v1/videos/${videoId}`
     );
-    console.log(responce.data.data);
-    return responce.data.data;
+    console.log(responce.data);
+    return responce.data;
   },
   updateVideo: async (videoId: string, data: any) => {
+    console.log("updateVideo", videoId, data);
     const responce = await axiosClient.patch(
-      `http://localhost:8000/api/v1/videos?videoId=${videoId}`,
-      data
+      `http://localhost:8000/api/v1/videos/${videoId}`,
+      data,
+      {
+        headers: { "Content-Type": "multipart/form-data" },
+        withCredentials: true,
+      }
     );
     console.log(responce.data.data);
     return responce.data.data;
@@ -39,7 +44,7 @@ export const Videos = {
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },
-          withCredentials: true, 
+          withCredentials: true,
         }
       );
       console.log(response.data.data);
@@ -49,12 +54,12 @@ export const Videos = {
       throw error;
     }
   },
-  togglePublishStatus: async (videoId:string)=>{
-    console.log("togglePublishStatus",videoId)
+  togglePublishStatus: async (videoId: string) => {
+    console.log("togglePublishStatus", videoId);
     const response = await axiosClient.patch(
-        `http://localhost:8000/api/v1/videos/toggle/publish/${videoId}`
+      `http://localhost:8000/api/v1/videos/toggle/publish/${videoId}`
     );
-    console.log("togglePublishStatus", response.data.data)
-    return response.data.data
-  }
+    console.log("togglePublishStatus", response.data.data);
+    return response.data.data;
+  },
 };

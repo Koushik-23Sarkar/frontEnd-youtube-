@@ -32,7 +32,6 @@ export default function UploadVideoModelPopUp({
       setThumbnailPreview(URL.createObjectURL(file));
     }
   };
-
   return (
      <div className="absolute inset-0 z-10 bg-black/50 px-4 pb-[86px] pt-4 sm:px-14 sm:py-8">
       <div className="h-full overflow-auto border bg-[#121212]">

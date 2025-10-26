@@ -31,6 +31,8 @@ export default function Home() {
   const [numberOfLikes, setNumberOfLikes] = useState(-1);
   const [uploading, setUploading] = useState(false);
   const [videos, setvideos] = useState([]);
+  const [updateOrDeleteVideoId, setUpdateOrDeleteVideoId] = useState<string | null>(null);
+  const [haveNewData,setHaveNewData] = useState(false)
   //  console.log("admin user ", user)
   const handleActiveTab = (value: any) => {
     console.log(value);
@@ -78,6 +80,23 @@ export default function Home() {
     }
   };
 
+  const getupdateOrDeleteVideoId = (videoId:string)=>{
+    setUpdateOrDeleteVideoId(videoId)
+    console.log("getupdateOrDeleteVideoId", updateOrDeleteVideoId);
+  }
+
+  const handleVideoUpdate = async (data: any)=>{
+    if(updateOrDeleteVideoId && data){
+      await Videos.updateVideo(updateOrDeleteVideoId,data)
+      setHaveNewData((prev) => (!prev))
+    }
+  }
+  const handleVideoDelete = async ()=>{
+    if(updateOrDeleteVideoId){
+      await Videos.deleteVideo(updateOrDeleteVideoId);
+      setHaveNewData((prev) => (!prev))
+    }
+  }
   useEffect(() => {
     const getAdminData = async () => {
       const data = await Dashboard.getChannelStats();
@@ -98,7 +117,7 @@ export default function Home() {
       setvideos(data);
     };
     fetchVideos();
-  }, []);
+  }, [haveNewData]);
 
   return (
     <div className="h-screen overflow-y-auto bg-[#121212] text-white">
@@ -174,6 +193,7 @@ export default function Home() {
                       numberOfLikes={video.likeCount}  
                       createdAtDate={moment(video.createdAt).format("DD/MM/YYYY")}
                       isPublished={video.isPublished}
+                      getupdateOrDeleteVideoId={getupdateOrDeleteVideoId}
                     />
                   ))}
                 {/* <TableDataAdmin onActiveTabChange={handleActiveTab} />
@@ -183,10 +203,16 @@ export default function Home() {
           </div>
         </div>
         {activeTab == activeTabStatus.editPopup && (
-          <EditVideoPopup onActiveTabChange={handleActiveTab} />
+          <EditVideoPopup 
+            handleVideoUpdate={handleVideoUpdate}
+            onActiveTabChange={handleActiveTab} 
+          />
         )}
         {activeTab == activeTabStatus.deletePopup && (
-          <DeleteVideoPopup onActiveTabChange={handleActiveTab} />
+          <DeleteVideoPopup 
+            handleVideoDelete={handleVideoDelete}
+            onActiveTabChange={handleActiveTab} 
+          />
         )}
         {activeTab == activeTabStatus.uploadPopup && (
           <UploadVideoModelPopUp

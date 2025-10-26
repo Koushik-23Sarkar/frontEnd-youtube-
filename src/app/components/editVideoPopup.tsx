@@ -4,8 +4,10 @@ import "../globals.css";
 
 export default function EditVideoPopup({
   onActiveTabChange,
+  handleVideoUpdate
 }: {
   onActiveTabChange: any;
+  handleVideoUpdate: any
 }) {
   const [title, setTitle] = useState<string>();
   const [description, setDescription] = useState<string>();
@@ -29,7 +31,7 @@ export default function EditVideoPopup({
     for (let [key, value] of formData.entries()) {
       console.log(key, value);
     }
-
+    handleVideoUpdate(formData);
     onActiveTabChange(null);
   };
   return (

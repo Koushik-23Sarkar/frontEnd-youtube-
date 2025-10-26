@@ -1,5 +1,5 @@
 import "../globals.css";
-export default function DeleteVideoPopup({onActiveTabChange}) {
+export default function DeleteVideoPopup({onActiveTabChange,handleVideoDelete}:{handleVideoDelete:any,onActiveTabChange:any}) {
   return (
     <div className="fixed inset-0 top-[calc(66px)] z-10 flex flex-col bg-black/50 px-4 pb-[86px] pt-4 sm:top-[calc(82px)] sm:px-14 sm:py-8">
       <div className="mx-auto w-full max-w-lg overflow-auto rounded-lg border border-gray-700 bg-[#121212] p-4">
@@ -50,7 +50,12 @@ export default function DeleteVideoPopup({onActiveTabChange}) {
             className="col-span-2 border px-4 py-3 sm:col-span-1">
             Cancel
           </button>
-          <button className="col-span-2 bg-red-700 px-4 py-3 disabled:bg-[#E4D3FF] sm:col-span-1">
+          <button 
+            onClick={()=>{
+              handleVideoDelete()
+              onActiveTabChange(null)
+            }}
+            className="col-span-2 bg-red-700 px-4 py-3 disabled:bg-[#E4D3FF] sm:col-span-1">
             Delete
           </button>
         </div>
