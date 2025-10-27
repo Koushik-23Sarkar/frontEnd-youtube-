@@ -1,14 +1,13 @@
 const { createSlice, createAsyncThunk } = require("@reduxjs/toolkit");
 import axios from "axios";
+import axiosClient from "./utils/axiosClient";
 
 export const searchVideo = createAsyncThunk(
   "search/video",
   async (params, { rejectWithValue }) => {
-    console.log(params);
+    console.log("searchVideo", params);
     try {
-      const res = await axios.get("http://localhost:8000/api/v1/videos", {
-        ...params,
-      });
+      const res = await axiosClient.get(`http://localhost:8000/api/v1/videos?query=${params.query}`);
       const data = res.data; // Assuming ApiResponse wraps it
       return data;
     } catch (error) {

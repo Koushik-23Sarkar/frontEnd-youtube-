@@ -25,7 +25,7 @@ export default function SearchInputBox() {
       const params = {
         page,
         limit,
-        query: searchContent,
+        query: searchContent?.trim(),
         sortBy,
         sortType
       }
@@ -60,6 +60,7 @@ export default function SearchInputBox() {
       <input
         className="w-full border bg-transparent py-1 pl-8 pr-3 placeholder-white outline-none sm:py-2"
         placeholder="Search"
+        autoComplete="off"
         value={searchContent}
         onChange={(e) => {
           setQuery(e.target.value)

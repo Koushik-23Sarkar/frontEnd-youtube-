@@ -1,4 +1,32 @@
+"use Client";
+
+import { Users } from "@/app/lib/Users/users.service";
+import { useState } from "react";
+
 export default function ChannelPasswordChange() {
+  const [currentPassword, setCurrentpassword] = useState<string>("");
+  const [newPassword, setNewPassword] = useState<string>("");
+  const [confirmPassword, setConfirmPassword] = useState<string>("");
+
+  const handleCancel = () => {
+    setCurrentpassword("");
+    setNewPassword("");
+    setConfirmPassword("");
+  };
+
+  const handleUpdatePassword = async () => {
+    if (newPassword === confirmPassword && confirmPassword != currentPassword) {
+      const data = await Users.changeCurrentPassword(
+        currentPassword,
+        newPassword
+      );
+      console.log(data);
+      setCurrentpassword("");
+      setNewPassword("");
+      setConfirmPassword("");
+    }
+  };
+
   return (
     <div className="flex flex-wrap justify-center gap-y-4 py-4">
       <div className="w-full sm:w-1/2 lg:w-1/3">
@@ -16,6 +44,9 @@ export default function ChannelPasswordChange() {
               </label>
               <input
                 type="password"
+                value={currentPassword}
+                onChange={(e) => setCurrentpassword(e.target.value)}
+                autoComplete="new-password"
                 className="w-full rounded-lg border bg-transparent px-2 py-1.5"
                 id="old-pwd"
                 placeholder="Current password"
@@ -27,6 +58,8 @@ export default function ChannelPasswordChange() {
               </label>
               <input
                 type="password"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
                 className="w-full rounded-lg border bg-transparent px-2 py-1.5"
                 id="new-pwd"
                 placeholder="New password"
@@ -41,6 +74,8 @@ export default function ChannelPasswordChange() {
               </label>
               <input
                 type="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
                 className="w-full rounded-lg border bg-transparent px-2 py-1.5"
                 id="cnfrm-pwd"
                 placeholder="Confirm password"
@@ -49,10 +84,16 @@ export default function ChannelPasswordChange() {
           </div>
           <hr className="border border-gray-300" />
           <div className="flex items-center justify-end gap-4 p-4">
-            <button className="inline-block rounded-lg border px-3 py-1.5 hover:bg-white/10">
+            <button
+              onClick={handleCancel}
+              className="inline-block rounded-lg border px-3 py-1.5 hover:bg-white/10"
+            >
               Cancel
             </button>
-            <button className="inline-block bg-[#ae7aff] px-3 py-1.5 text-black">
+            <button
+              onClick={handleUpdatePassword}
+              className="inline-block bg-[#ae7aff] px-3 py-1.5 text-black"
+            >
               Update Password
             </button>
           </div>

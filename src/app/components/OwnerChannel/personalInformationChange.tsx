@@ -1,4 +1,26 @@
-export default function PersonalInformationChange() {
+"use Client";
+
+import { useState } from "react";
+
+export default function PersonalInformationChange({
+  fullName,
+  email,
+  updatePersonalInformation,
+}: {
+  fullName: string;
+  email: string;
+  updatePersonalInformation: any;
+}) {
+  const [firstName, setFirstName] = useState<string>(fullName.split(" ")[0]);
+  const [lastName, setLastName] = useState<string>(fullName.split(" ")[1]);
+  const [emailadd, setEmailAdd] = useState<string>(email);
+
+  const handleCancel = () => {
+    setFirstName(fullName.split(" ")[0]);
+    setLastName(fullName.split(" ")[1]);
+    setEmailAdd(email);
+  };
+
   return (
     <div className="flex flex-wrap justify-center gap-y-4 py-4">
       <div className="w-full sm:w-1/2 lg:w-1/3">
@@ -14,6 +36,8 @@ export default function PersonalInformationChange() {
               </label>
               <input
                 type="text"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
                 className="w-full rounded-lg border bg-transparent px-2 py-1.5"
                 id="firstname"
                 placeholder="Enter first name"
@@ -26,6 +50,8 @@ export default function PersonalInformationChange() {
               </label>
               <input
                 type="text"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
                 className="w-full rounded-lg border bg-transparent px-2 py-1.5"
                 id="lastname"
                 placeholder="Enter last name"
@@ -55,6 +81,8 @@ export default function PersonalInformationChange() {
                 </div>
                 <input
                   type="email"
+                  value={emailadd}
+                  onChange={(e) => setEmailAdd(e.target.value)}
                   className="w-full rounded-lg border bg-transparent py-1.5 pl-10 pr-2"
                   id="lastname"
                   placeholder="Enter email address"
@@ -65,10 +93,15 @@ export default function PersonalInformationChange() {
           </div>
           <hr className="border border-gray-300" />
           <div className="flex items-center justify-end gap-4 p-4">
-            <button className="inline-block rounded-lg border px-3 py-1.5 hover:bg-white/10">
+            <button
+              onClick={handleCancel}
+              className="inline-block rounded-lg border px-3 py-1.5 hover:bg-white/10"
+            >
               Cancel
             </button>
-            <button className="inline-block bg-[#ae7aff] px-3 py-1.5 text-black">
+            <button 
+              onClick={()=>updatePersonalInformation(firstName,lastName,email)}
+              className="inline-block bg-[#ae7aff] px-3 py-1.5 text-black">
               Save changes
             </button>
           </div>

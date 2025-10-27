@@ -72,6 +72,9 @@ export default function Home() {
   const [numberOfSubscriber,setNumberOfSubscriber] = useState(0);
   const [numberOfSubscribedChannel,setNumberOfSubscribedChannel] = useState(0);
 
+  {/** To know, when we need to fetch the updated data from server */}
+  const [updataData,setUpdateData] = useState(false)
+
   console.log(channelId);
   console.log(user?._id);
 
@@ -94,6 +97,13 @@ export default function Home() {
     setVideoPopUp(value);
     console.log(value);
   };
+
+  const updatePersonalInformation = async (firstName:string,lastName:string,email:string)=>{
+    const fullname = firstName + " " + lastName;
+    await Users.updateAccountDetails(fullname,email);
+    setUpdateData((prev)=> (!prev))
+  }
+
 
   useEffect(()=>{
     async function fetchData(){
@@ -184,20 +194,6 @@ export default function Home() {
               </li>
               <li className="w-full">
                 <button
-                  onClick={() =>
-                    setActiveTab(activeTabStatus.ChannelInformation)
-                  }
-                  className={`w-full px-3 py-1.5 border-b-2 ${
-                    activeTab === activeTabStatus.ChannelInformation
-                      ? "border-[#ae7aff] text-[#ae7aff]"
-                      : "border-transparent text-gray-400"
-                  }`}
-                >
-                  Channel Information
-                </button>
-              </li>
-              <li className="w-full">
-                <button
                   onClick={() => setActiveTab(activeTabStatus.ChangePassword)}
                   className={`w-full px-3 py-1.5 border-b-2 ${
                     activeTab === activeTabStatus.ChangePassword
@@ -277,11 +273,15 @@ export default function Home() {
           channelSubscribed?.length? <ChannelSubscribedPage channelSubscribed={channelSubscribed} /> : <ChannelEmptySubScribed />
         )}
         {activeTab == activeTabStatus.PersonalInformation && (
-          <PersonalInformationChange />
+          <PersonalInformationChange 
+            updatePersonalInformation={updatePersonalInformation}
+            fullName={user.fullName}
+            email={user.email}
+          />
         )}
-        {activeTab == activeTabStatus.ChannelInformation && (
+        {/* {activeTab == activeTabStatus.ChannelInformation && (
           <ChannelInformationChange />
-        )}
+        )} */}
         {activeTab == activeTabStatus.ChangePassword && (
           <ChannelPasswordChange />
         )}
